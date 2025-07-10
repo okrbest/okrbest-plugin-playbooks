@@ -143,20 +143,20 @@ export interface DraftPlaybookWithChecklist extends Omit<PlaybookWithChecklist, 
 }
 
 // setPlaybookDefaults fills in a playbook with defaults for any fields left empty.
-export const setPlaybookDefaults = (playbook: DraftPlaybookWithChecklist) => ({
+export const setPlaybookDefaults = (playbook: DraftPlaybookWithChecklist, t?: (key: string) => string) => ({
     ...playbook,
-    title: playbook.title.trim() || 'Untitled playbook',
+    title: playbook.title.trim() || (t ? t('wX3k9U') : 'Untitled playbook'),
     checklists: playbook.checklists.map((checklist) => ({
         ...checklist,
-        title: checklist.title || 'Untitled checklist',
+        title: checklist.title || (t ? t('wX3k9V') : 'Untitled checklist'),
         items: checklist.items.map((item) => ({
             ...item,
-            title: item.title || 'Untitled task',
+            title: item.title || (t ? t('wX3k9W') : 'Untitled task'),
         })),
     })),
 });
 
-export function emptyPlaybook(): DraftPlaybookWithChecklist {
+export function emptyPlaybook(t?: (key: string) => string): DraftPlaybookWithChecklist {
     return {
         title: '',
         description: '',
@@ -169,7 +169,7 @@ export function emptyPlaybook(): DraftPlaybookWithChecklist {
         num_runs: 0,
         num_actions: 0,
         last_run_at: 0,
-        checklists: [emptyChecklist()],
+        checklists: [emptyChecklist(t)],
         members: [],
         reminder_message_template: '',
         reminder_timer_default_seconds: 7 * 24 * 60 * 60, // 7 days

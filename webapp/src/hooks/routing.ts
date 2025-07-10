@@ -3,6 +3,7 @@
 
 import {useEffect, useMemo} from 'react';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 import {GlobalState} from '@mattermost/types/store';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -10,7 +11,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {PresetTemplates} from 'src/components/templates/template_data';
-import {DraftPlaybookWithChecklist, Playbook, emptyPlaybook} from 'src/types/playbook';
+import {DraftPlaybookWithChecklist, Playbook, emptyPlaybook, setPlaybookDefaults} from 'src/types/playbook';
 import {PlaybookRole} from 'src/types/permissions';
 import {savePlaybook} from 'src/client';
 import {navigateToPluginUrl, pluginUrl} from 'src/browser_routing';
@@ -51,6 +52,7 @@ export function usePlaybooksRouting<TParam extends Playbook | Playbook['id']>(
     {urlOnly, onGo}: PlaybooksRoutingOptions<TParam> = {},
 ) {
     const currentUserId = useSelector(getCurrentUserId);
+    const {t} = useTranslation();
 
     return useMemo(() => {
         function go(path: string, p?: TParam) {
@@ -73,12 +75,13 @@ export function usePlaybooksRouting<TParam extends Playbook | Playbook['id']>(
             },
             create: async (params: PlaybookCreateQueryParameters) => {
                 const createNewPlaybook = async () => {
-                    const initialPlaybook: DraftPlaybookWithChecklist = {
-                        ...(PresetTemplates.find((t) => t.title === params.template)?.template || emptyPlaybook()),
+                    const template = PresetTemplates.find((template) => template.title === params.template);
+                    const initialPlaybook: DraftPlaybookWithChecklist = setPlaybookDefaults({
+                        ...(template?.template || emptyPlaybook(t)),
                         reminder_timer_default_seconds: 86400,
                         members: [{user_id: currentUserId, roles: [PlaybookRole.Member, PlaybookRole.Admin]}],
                         team_id: params.teamId || '',
-                    };
+                    }, t);
 
                     if (params.name) {
                         initialPlaybook.title = params.name;

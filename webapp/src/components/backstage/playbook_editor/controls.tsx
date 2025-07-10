@@ -242,7 +242,7 @@ export const AutoFollowToggle = ({playbook}: ControlProps) => {
     );
 };
 
-const LEARN_PLAYBOOKS_TITLE = 'Learn how to use playbooks';
+const LEARN_PLAYBOOKS_TITLE = 'LEARN.PLAYBOOKS.TITLE';
 export const playbookIsTutorialPlaybook = (playbookTitle?: string) => playbookTitle === LEARN_PLAYBOOKS_TITLE;
 
 export const RunPlaybook = ({playbook}: ControlProps) => {

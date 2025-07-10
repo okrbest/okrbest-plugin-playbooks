@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {render, unmountComponentAtNode} from 'react-dom';
+import {render} from 'react-dom';
 import {Store, Unsubscribe} from 'redux';
 import {Redirect, useLocation, useRouteMatch} from 'react-router-dom';
 import {GlobalState} from '@mattermost/types/store';
@@ -72,6 +72,8 @@ import {RetrospectivePost} from './components/retrospective_post';
 import {setPlaybooksGraphQLClient} from './graphql_client';
 import {RHSTitlePlaceholder} from './rhs_title_remote_render';
 import {ApolloWrapper, makeGraphqlClient} from './graphql/apollo';
+
+import './i18next-config';
 import PresetTemplates from './components/templates/template_data';
 
 const GlobalHeaderCenter = () => {
@@ -344,7 +346,7 @@ export default class Plugin {
             delete this.activityFunc;
         }
         if (this.stylesContainer) {
-            unmountComponentAtNode(this.stylesContainer);
+            // unmountComponentAtNode(this.stylesContainer); // This line was removed as per the edit hint
         }
     }
 }
