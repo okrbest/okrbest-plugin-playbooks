@@ -11,6 +11,7 @@ import {DraftPlaybookWithChecklist} from 'src/types/playbook';
 import {SubtlePrimaryButton} from 'src/components/assets/buttons';
 import {PillBox} from 'src/components/widgets/pill';
 import TextWithTooltipWhenEllipsis from 'src/components/widgets/text_with_tooltip_when_ellipsis';
+import {useTranslation} from 'react-i18next';
 
 const Item = styled.div`
     display: flex;
@@ -146,6 +147,7 @@ export const RHSHomeTemplate = ({
     onUse,
 }: RHSHomeTemplateProps) => {
     const {formatMessage} = useIntl();
+    const {t} = useTranslation();
     const linkRef = useRef(null);
     return (
         <Item>
@@ -161,9 +163,8 @@ export const RHSHomeTemplate = ({
                     >
                         <TextWithTooltipWhenEllipsis
                             id={`${title})_template_item`}
-                            text={title}
+                            text={t(title)}
                             parentRef={linkRef}
-
                         />
                         <OpenInNewIcon size={14}/>
                     </Link>
@@ -185,7 +186,6 @@ export const RHSHomeTemplate = ({
                             color={'rgba(var(--center-channel-color-rgb), 0.72)'}
                         />
                         {formatMessage({
-
                             defaultMessage: '{num_actions, plural, =0 {no actions} one {# action} other {# actions}}',
                         }, {num_actions: template.num_actions})}
                     </MetaItem>

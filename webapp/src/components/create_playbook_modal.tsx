@@ -5,6 +5,7 @@ import React, {ComponentProps, useState} from 'react';
 
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 import styled from 'styled-components';
 
@@ -18,6 +19,7 @@ import PublicPrivateSelector from './backstage/public_private_selector';
 import {TemplateDropdown} from './templates/template_selector';
 import MarkdownTextbox from './markdown_textbox';
 import GenericModal, {InlineLabel} from './widgets/generic_modal';
+import PresetTemplates from './templates/template_data';
 
 const ID = 'playbooks_create';
 
@@ -47,8 +49,9 @@ const Body = styled.div`
 	}
 `;
 
-const PlaybookCreateModal = ({startingName, startingTemplate, startingDescription, startingPublic, ...modalProps}: PlaybookCreateModalProps) => {
+export const PlaybookCreateModal = ({startingName, startingTemplate, startingDescription, startingPublic, ...modalProps}: PlaybookCreateModalProps) => {
     const {formatMessage} = useIntl();
+    const {t} = useTranslation();
     const [name, setName] = useState(startingName);
     const teamId = useSelector(getCurrentTeamId);
     const [template, setTemplate] = useState(startingTemplate);
@@ -71,7 +74,19 @@ const PlaybookCreateModal = ({startingName, startingTemplate, startingDescriptio
             confirmButtonText={formatMessage({defaultMessage: 'Create playbook'})}
             cancelButtonText={formatMessage({defaultMessage: 'Cancel'})}
             isConfirmDisabled={!requirementsMet}
-            handleConfirm={() => create({teamId, template, name, description, public: makePublicWithPermission})}
+            handleConfirm={() => {
+                const selectedTemplateObj = PresetTemplates.find((pt) => pt.title === template);
+                const isPresetTemplate = !!selectedTemplateObj;
+                const finalName = name || (isPresetTemplate ? t(selectedTemplateObj.title) : '');
+                const finalDescription = description || (isPresetTemplate && selectedTemplateObj.description ? t(selectedTemplateObj.description) : '');
+                create({
+                    teamId,
+                    template,
+                    name: finalName,
+                    description: finalDescription,
+                    public: makePublicWithPermission,
+                });
+            }}
             showCancel={true}
             autoCloseOnCancelButton={true}
             autoCloseOnConfirmButton={true}
