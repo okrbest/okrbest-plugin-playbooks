@@ -101,15 +101,15 @@
     },
     {
         "id": "app.user.run.status_disable",
-        "translation": "@{{.Username}} disabled the status updates for [{{.RunName}}]({{.RunURL}})"
+        "translation": "@{{.Username}}님이 [{{.RunName}}]({{.RunURL}})의 상태 업데이트를 비활성화했습니다."
     },
     {
         "id": "app.user.run.status_enable",
-        "translation": "@{{.Username}} enabled the status updates for [{{.RunName}}]({{.RunURL}})"
+        "translation": "@{{.Username}}님이 [{{.RunName}}]({{.RunURL}})의 상태 업데이트를 활성화했습니다."
     },
     {
         "id": "app.user.run.request_join_channel",
-        "translation": "@{{.Name}} is a run participant and wants join this channel. Any member of the channel can invite them.\n"
+        "translation": "@{{.Name}}님은 실행 참가자이며 이 채널에 참여하고 싶어합니다. 채널의 모든 멤버가 초대할 수 있습니다.\n"
     },
     {
         "id": "app.user.new_run.intro",
@@ -154,49 +154,56 @@
     {
         "id": "app.user.digest.tasks.due_in_x_days",
         "translation": {
-            "other": "Due in {{.Count}} day"
+            "one": "{{.Count}}일 후 마감",
+            "other": "{{.Count}}일 후 마감"
         }
     },
     {
         "id": "app.user.digest.tasks.num_assigned",
         "translation": {
-            "other": "You have {{.Count}} assigned task:"
+            "one": "{{.Count}}개의 할당된 작업이 있습니다:",
+            "other": "{{.Count}}개의 할당된 작업이 있습니다:"
         }
     },
     {
         "id": "app.user.digest.tasks.num_assigned_due_until_today",
         "translation": {
-            "other": "You have {{.Count}} assigned task that is now due:"
+            "other": "현재 마감된 할당된 작업이 {{.Count}}개 있습니다:"
         }
     },
     {
         "id": "app.user.run.confirm_finish.num_outstanding",
         "translation": {
-            "other": "There is **{{.Count}} outstanding task**. Are you sure you want to finish the run *{{.RunName}}* for all participants?"
+            "one": "**{{.Count}}개의 미해결 작업**이 있습니다. 모든 참가자에 대해 *{{.RunName}}* 실행을 완료하시겠습니까?",
+            "other": "**{{.Count}}개의 미해결 작업**이 있습니다. 모든 참가자에 대해 *{{.RunName}}* 실행을 완료하시겠습니까?"
         }
     },
     {
         "id": "app.user.run.update_status.num_channel",
         "translation": {
-            "other": "Provide an update to the stakeholders. This post will be broadcasted to {{.Count}} channel."
+            "one": "이 게시물은 이해관계자에게 업데이트를 제공합니다. {{.Count}}개의 채널에 전송됩니다.",
+            "other": "이 게시물은 이해관계자에게 업데이트를 제공합니다. {{.Count}}개의 채널에 전송됩니다."
         }
     },
     {
         "id": "app.user.digest.runs_in_progress.num_in_progress",
         "translation": {
-            "other": "You have {{.Count}} run currently in progress:"
+            "one": "현재 진행 중인 실행이 {{.Count}}건 있습니다:",
+            "other": "현재 진행 중인 실행이 {{.Count}}건 있습니다:"
         }
     },
     {
         "id": "app.user.digest.tasks.due_after_today",
         "translation": {
-            "other": "You have **{{.Count}} assigned task due after today**."
+            "one": "오늘 이후 마감 예정인 할당된 작업이 **{{.Count}}개** 있습니다.",
+            "other": "오늘 이후 마감 예정인 할당된 작업이 **{{.Count}}개** 있습니다."
         }
     },
     {
         "id": "app.user.digest.overdue_status_updates.num_overdue",
         "translation": {
-            "other": "You have {{.Count}} run overdue for a status update:"
+            "one": "상태 업데이트가 연체된 실행이 {{.Count}}건 있습니다:",
+            "other": "상태 업데이트가 연체된 실행이 {{.Count}}건 있습니다:"
         }
     }
 ]

@@ -21,7 +21,8 @@ import {useLHSRefresh} from 'src/components/backstage/lhs_navigation';
 import TemplateItem from './template_item';
 import PresetTemplates, {PresetTemplate} from './template_data';
 
-const presetTemplateOptions = PresetTemplates.map((template: PresetTemplate) => ({label: template.title, value: template.title}));
+const presetTemplateOptionsWithTranslation = (t: (s: string) => string) =>
+    PresetTemplates.map((template: PresetTemplate) => ({label: t(template.title), value: template.title}));
 
 interface Props {
     templates?: PresetTemplate[];
@@ -34,10 +35,13 @@ interface TemplateDropdownProps {
 
 export const TemplateDropdown = (props: TemplateDropdownProps) => {
     const {formatMessage} = useIntl();
+    const {t} = useTranslation();
 
     const handleTemplateSet = (option: {value: string}) => {
         props.onTemplateSet(option.value);
     };
+
+    const options = presetTemplateOptionsWithTranslation(t);
 
     return (
         <StyledSelect
@@ -45,8 +49,8 @@ export const TemplateDropdown = (props: TemplateDropdownProps) => {
             isMulti={false}
             placeholder={formatMessage({defaultMessage: 'Select a template'})}
             onChange={handleTemplateSet}
-            options={presetTemplateOptions}
-            value={presetTemplateOptions.find((val) => val.value === props?.template)}
+            options={options}
+            value={options.find((val) => val.value === props?.template)}
             isClearable={false}
             maxMenuHeight={380}
         />
@@ -91,9 +95,9 @@ const TemplateSelector = ({templates}: Props) => {
     return (
         <I18nextProvider i18n={i18n}>
             <SelectorGrid>
-                {displayTemplates.map((template: PresetTemplate) => (
+                {displayTemplates.map((template: PresetTemplate, idx: number) => (
                     <TemplateItem
-                        key={template.title}
+                        // key={template.title} // key props 제거
                         label={template.label}
                         title={template.title}
                         description={template.description ?? ''}
