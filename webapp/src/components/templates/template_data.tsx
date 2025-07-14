@@ -53,26 +53,26 @@ const preprocessTemplates = (presetTemplates: PresetTemplate[]): PresetTemplate[
 
 export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
     {
-        title: 'Blank',
+        title: 'BLANK.TITLE',
         icon: <ClipboardChecklist/>,
         color: '#FFBC1F14',
-        description: 'Start with a blank state and create your own masterpiece.',
+        description: 'BLANK.DESCRIPTION',
         template: {
             ...emptyPlaybook(),
-            title: 'Blank',
-            description: 'Customize this playbook\'s description to give an overview of when and how this playbook is run.',
+            title: 'BLANK.TITLE',
+            description: 'BLANK.DESCRIPTION',
         },
     },
     {
-        title: 'Product Release',
-        description: 'Perfect your release process from ideation to production.',
+        title: 'PRODUCT.RELEASE.TITLE',
+        description: 'PRODUCT.RELEASE.DESCRIPTION',
         icon: <ProductRelease/>,
         color: '#C4313314',
         author: <MattermostLogo/>,
         template: {
             ...emptyPlaybook(),
-            title: 'Product Release',
-            description: 'Customize this playbook to reflect your own product release process.',
+            title: 'PRODUCT.RELEASE.TITLE',
+            description: 'PRODUCT.RELEASE.DESCRIPTION',
             checklists: [
                 {
                     title: 'Prepare code',
@@ -151,15 +151,15 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         },
     },
     {
-        title: 'Incident Resolution',
-        description: 'Resolving incidents requires speed and accuracy. Streamline your processes for rapid response and resolution.',
+        title: 'INCIDENT.RESOLUTION.TITLE',
+        description: 'INCIDENT.RESOLUTION.DESCRIPTION',
         icon: <IncidentResolutionSvg/>,
         author: <MattermostLogo/>,
         color: '#33997014',
         template: {
             ...emptyPlaybook(),
-            title: 'Incident Resolution',
-            description: 'Customize this playbook to reflect your own incident resolution process.',
+            title: 'INCIDENT.RESOLUTION.TITLE',
+            description: 'INCIDENT.RESOLUTION.DESCRIPTION',
             checklists: [
                 {
                     title: 'Setup for triage',
@@ -242,14 +242,14 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         },
     },
     {
-        title: 'Customer Onboarding',
-        description: 'Create a standardized, smooth onboarding experience for new customers to get them up and running quickly. ',
+        title: 'CUSTOMER.ONBOARDING.TITLE',
+        description: 'CUSTOMER.ONBOARDING.DESCRIPTION',
         icon: <CustomerOnboarding/>,
         color: '#3C507A14',
         author: <MattermostLogo/>,
         template: {
             ...emptyPlaybook(),
-            title: 'Customer Onboarding',
+            title: 'CUSTOMER.ONBOARDING.TITLE',
             description: mtrim`New Mattermost customers are onboarded following a process similar to this playbook.
 
             Customize this playbook to reflect your own customer onboarding process.`,
@@ -334,14 +334,14 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         },
     },
     {
-        title: 'Employee Onboarding',
-        description: 'Set your new hires up for success with input from your entire organization, in one smooth process.',
+        title: 'EMPLOYEE.ONBOARDING.TITLE',
+        description: 'EMPLOYEE.ONBOARDING.DESCRIPTION',
         icon: <EmployeeOnboarding/>,
         color: '#FFBC1F14',
         author: <MattermostLogo/>,
         template: {
             ...emptyPlaybook(),
-            title: 'Employee Onboarding',
+            title: 'EMPLOYEE.ONBOARDING.TITLE',
             description: mtrim`Every new Mattermost Staff member completes this onboarding process when joining the company.
 
             Customize this playbook to reflect your own employee onboarding process.`,
@@ -439,15 +439,15 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         },
     },
     {
-        title: 'Feature Lifecycle',
-        description: 'Create transparent workflows across development teams to ensure your feature development process is seamless.',
+        title: 'FEATURE.LIFECYCLE.TITLE',
+        description: 'FEATURE.LIFECYCLE.DESCRIPTION',
         icon: <FeatureLifecycle/>,
         color: '#62697E14',
         author: <MattermostLogo/>,
         template: {
             ...emptyPlaybook(),
-            title: 'Feature Lifecycle',
-            description: 'Customize this playbook to reflect your own feature lifecycle process.',
+            title: 'FEATURE.LIFECYCLE.TITLE',
+            description: 'FEATURE.LIFECYCLE.DESCRIPTION',
             checklists: [
                 {
                     title: 'Plan',
@@ -562,14 +562,14 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         },
     },
     {
-        title: 'Bug Bash',
-        description: 'Customize this playbook to reflect your own bug bash process.',
+        title: 'BUG.BASH.TITLE',
+        description: 'BUG.BASH.DESCRIPTION',
         icon: <BugBash/>,
         color: '#7A560014',
         author: <MattermostLogo/>,
         template: {
             ...emptyPlaybook(),
-            title: 'Bug Bash',
+            title: 'BUG.BASH.TITLE',
             description: mtrim`About once or twice a month, the Mattermost Playbooks team uses this playbook to run a 50 minute bug-bash testing the latest version of Playbooks.
 
             Customize this playbook to reflect your own bug bash process.`,
@@ -720,17 +720,17 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         },
     },
     {
-        title: 'Learn how to use playbooks',
+        title: 'LEARN.PLAYBOOKS.TITLE',
         label: 'Recommended For Beginners',
         labelColor: '#E5AA1F29-#A37200',
         icon: <LearnPlaybooks/>,
         color: '#FFBC1F14',
         author: <MattermostLogo/>,
-        description: 'New to playbooks? This playbook will help you get familiar with playbooks, configurations, and playbook runs.',
+        description: 'LEARN.PLAYBOOKS.DESCRIPTION',
         template: {
             ...emptyPlaybook(),
-            title: 'Learn how to use playbooks',
-            description: mtrim`Use this playbook to learn more about playbooks. Go through this page to check out the contents or simply select 'start a test run' in the top right corner.`,
+            title: 'LEARN.PLAYBOOKS.TITLE',
+            description: 'LEARN.PLAYBOOKS.DESCRIPTION',
             create_public_playbook_run: true,
             channel_name_template: 'Onboarding Run',
             checklists: [

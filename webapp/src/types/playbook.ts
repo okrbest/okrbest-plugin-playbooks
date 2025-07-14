@@ -143,20 +143,20 @@ export interface DraftPlaybookWithChecklist extends Omit<PlaybookWithChecklist, 
 }
 
 // setPlaybookDefaults fills in a playbook with defaults for any fields left empty.
-export const setPlaybookDefaults = (playbook: DraftPlaybookWithChecklist) => ({
+export const setPlaybookDefaults = (playbook: DraftPlaybookWithChecklist, t?: (key: string) => string) => ({
     ...playbook,
-    title: playbook.title.trim() || 'Untitled playbook',
+    title: playbook.title.trim() || (t ? t('wX3k9U') : 'Untitled playbook'),
     checklists: playbook.checklists.map((checklist) => ({
         ...checklist,
-        title: checklist.title || 'Untitled checklist',
+        title: checklist.title || (t ? t('wX3k9V') : 'Untitled checklist'),
         items: checklist.items.map((item) => ({
             ...item,
-            title: item.title || 'Untitled task',
+            title: item.title || (t ? t('wX3k9W') : 'Untitled task'),
         })),
     })),
 });
 
-export function emptyPlaybook(): DraftPlaybookWithChecklist {
+export function emptyPlaybook(t?: (key: string) => string): DraftPlaybookWithChecklist {
     return {
         title: '',
         description: '',
@@ -188,7 +188,7 @@ export function emptyPlaybook(): DraftPlaybookWithChecklist {
         message_on_join: defaultMessageOnJoin,
         message_on_join_enabled: false,
         retrospective_reminder_interval_seconds: 0,
-        retrospective_template: defaultRetrospectiveTemplate,
+        retrospective_template: defaultRetrospectiveTemplate(t),
         retrospective_enabled: true,
         signal_any_keywords: [],
         signal_any_keywords_enabled: false,
@@ -277,7 +277,9 @@ Here are some resources that you may find helpful:
 [Mattermost community channel](https://community.mattermost.com/core/channels/developers-playbooks)
 [User guide and documentation](https://docs.mattermost.com/guides/playbooks.html)`;
 
-export const defaultRetrospectiveTemplate = `### Summary
+export const defaultRetrospectiveTemplate = (t?: (key: string) => string) => {
+    if (!t) {
+        return `### Summary
 This should contain 2-3 sentences that give a reader an overview of what happened, what was the cause, and what was done. The briefer the better as this is what future teams will look at first for reference.
 
 ### What was the impact?
@@ -297,4 +299,8 @@ This section lists the action items to turn learnings into changes that help the
 
 ### Timeline highlights
 This section is a curated log that details the most important moments. It can contain key communications, screen shots, or other artifacts. Use the built-in timeline feature to help you retrace and replay the sequence of events.`;
+    }
+    
+    return t('wX3k9Y');
+};
 
