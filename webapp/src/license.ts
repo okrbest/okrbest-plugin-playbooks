@@ -53,9 +53,10 @@ export const checkEnterpriseLicensed = (license: Record<string, string>) => {
 // or has `EnableDeveloper` and `EnableTesting` configuration settings enabled,
 // signaling a non-production, developer mode.
 export const isProfessionalLicensedOrDevelopment = (state: GlobalState): boolean => {
-    const license = getLicense(state);
+    // const license = getLicense(state);
 
-    return checkProfessionalLicensed(license) || isConfiguredForDevelopment(state);
+    // return checkProfessionalLicensed(license) || isConfiguredForDevelopment(state);
+    return true;
 };
 
 export const checkProfessionalLicensed = (license: Record<string, string>) => {

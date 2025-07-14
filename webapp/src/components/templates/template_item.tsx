@@ -3,6 +3,7 @@
 
 import React, {HTMLAttributes} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useTranslation} from 'react-i18next';
 
 import styled from 'styled-components';
 
@@ -126,6 +127,12 @@ const TemplateItem = ({
     ...attrs
 }: Props & HTMLAttributes<HTMLDivElement>) => {
     const {formatMessage} = useIntl();
+    const {t} = useTranslation();
+    
+    // i18next로 번역된 제목과 설명
+    const translatedTitle = t(title);
+    const translatedDescription = description ? t(description) : '';
+    
     return (
         <Item
             role='button'
@@ -148,8 +155,8 @@ const TemplateItem = ({
                 </HoverPanel>
             </Thumbnail>
             <Detail>
-                <Title>{title}</Title>
-                <Description>{description}</Description>
+                <Title>{translatedTitle}</Title>
+                <Description>{translatedDescription}</Description>
                 {author && (
                     <Tooltip
                         id={`${title}_author_usedby`}
