@@ -75,77 +75,77 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
             description: 'PRODUCT.RELEASE.DESCRIPTION',
             checklists: [
                 {
-                    title: 'Prepare code',
+                    title: '코드 준비',
                     items: [
-                        newChecklistItem('Triage and check for pending tickets and PRs to merge'),
-                        newChecklistItem('Start drafting changelog, feature documentation, and marketing materials'),
-                        newChecklistItem('Review and update project dependencies as needed'),
-                        newChecklistItem('QA prepares release testing assignments'),
-                        newChecklistItem('Merge database upgrade'),
+                        newChecklistItem('남아있는 티켓과 병합 대기 중인 PR을 분류 및 확인'),
+                        newChecklistItem('변경 로그, 기능 문서, 마케팅 자료 초안 작성 시작'),
+                        newChecklistItem('필요시 프로젝트 의존성 검토 및 업데이트'),
+                        newChecklistItem('QA가 릴리즈 테스트 할당 준비'),
+                        newChecklistItem('데이터베이스 업그레이드 병합'),
                     ],
                 },
                 {
-                    title: 'Release testing',
+                    title: '릴리즈 테스트',
                     items: [
-                        newChecklistItem('Cut a Release Candidate (RC-1)'),
-                        newChecklistItem('QA runs smoke tests on the pre-release build'),
-                        newChecklistItem('QA runs automated load tests and upgrade tests on the pre-release build'),
-                        newChecklistItem('Triage and merge regression bug fixes'),
+                        newChecklistItem('릴리즈 후보(RC-1) 생성'),
+                        newChecklistItem('QA가 프리릴리즈 빌드에 대해 스모크 테스트 수행'),
+                        newChecklistItem('QA가 프리릴리즈 빌드에 대해 자동 부하 테스트 및 업그레이드 테스트 수행'),
+                        newChecklistItem('회귀 버그 수정사항 분류 및 병합'),
                     ],
                 },
                 {
-                    title: 'Prepare release for production',
+                    title: '프로덕션 릴리즈 준비',
                     items: [
-                        newChecklistItem('QA final approves the release'),
-                        newChecklistItem('Cut the final release build and publish'),
-                        newChecklistItem('Deploy changelog, upgrade notes, and feature documentation'),
-                        newChecklistItem('Confirm minimum server requirements are updated in documentation'),
-                        newChecklistItem('Update release download links in relevant docs and webpages'),
-                        newChecklistItem('Publish announcements and marketing'),
+                        newChecklistItem('QA가 최종 릴리즈 승인'),
+                        newChecklistItem('최종 릴리즈 빌드 생성 및 배포'),
+                        newChecklistItem('변경 로그, 업그레이드 노트, 기능 문서 배포'),
+                        newChecklistItem('최소 서버 요구사항이 문서에 반영되었는지 확인'),
+                        newChecklistItem('관련 문서 및 웹페이지의 릴리즈 다운로드 링크 업데이트'),
+                        newChecklistItem('공지 및 마케팅 자료 게시'),
                     ],
                 },
                 {
-                    title: 'Post-release',
+                    title: '릴리즈 후',
                     items: [
-                        newChecklistItem('Schedule a release retrospective'),
-                        newChecklistItem('Add dates for the next release to the release calendar and communicate to stakeholders'),
-                        newChecklistItem('Compose release metrics'),
-                        newChecklistItem('Prepare security update communications'),
-                        newChecklistItem('Archive the incident channel and create a new one for the next release'),
+                        newChecklistItem('릴리즈 회고 일정 잡기'),
+                        newChecklistItem('다음 릴리즈 일정을 릴리즈 캘린더에 추가하고 이해관계자에게 전달'),
+                        newChecklistItem('릴리즈 지표 작성'),
+                        newChecklistItem('보안 업데이트 커뮤니케이션 준비'),
+                        newChecklistItem('인시던트 채널을 보관하고 다음 릴리즈를 위한 새 채널 생성'),
                     ],
                 },
             ],
             create_public_playbook_run: false,
-            channel_name_template: 'Release (vX.Y)',
+            channel_name_template: '릴리즈 (vX.Y)',
             message_on_join_enabled: true,
             message_on_join:
-                mtrim`Hello and welcome!
+                mtrim`안녕하세요!
 
-                This channel was created as part of the **Product Release** playbook and is where conversations related to this release are held. You can customize this message using markdown so that every new channel member can be welcomed with helpful context and resources.`,
+                이 채널은 **제품 릴리즈** 플레이북의 일부로 생성되었으며, 해당 릴리즈와 관련된 대화가 이루어집니다. 이 메시지는 마크다운으로 자유롭게 수정할 수 있으며, 새로운 채널 멤버가 유용한 맥락과 리소스를 안내받을 수 있도록 맞춤화할 수 있습니다.`,
             run_summary_template_enabled: true,
             run_summary_template:
-                mtrim`**About**
-                - Version number: TBD
-                - Target-date: TBD
+                mtrim`**소개**
+                - 버전 번호: 미정
+                - 목표 날짜: 미정
 
-                **Resources**
-                - Jira filtered view: [link TBD](#)
-                - Blog post draft: [link TBD](#)`,
+                **리소스**
+                - Jira 필터 뷰: [링크 미정](#)
+                - 블로그 포스트 초안: [링크 미정](#)`,
             reminder_message_template:
-                mtrim`### Changes since last update
+                mtrim`### 마지막 업데이트 이후 변경사항
                 -
 
-                ### Outstanding PRs
+                ### 남아있는 PR
                 - `,
             reminder_timer_default_seconds: 24 * 60 * 60, // 24 hours
             retrospective_template:
-                mtrim`### Start
+                mtrim`### 시작(START)
                 -
 
-                ### Stop
+                ### 중단(STOP)
                 -
 
-                ### Keep
+                ### 유지(KEEP)
                 - `,
             retrospective_reminder_interval_seconds: 0, // Once
         },
@@ -162,37 +162,37 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
             description: 'INCIDENT.RESOLUTION.DESCRIPTION',
             checklists: [
                 {
-                    title: 'Setup for triage',
+                    title: '트리아지 준비',
                     items: [
-                        newChecklistItem('Add on-call engineer to channel'),
-                        newChecklistItem('Start bridge call', '', '/zoom start'),
-                        newChecklistItem('Update description with current situation'),
-                        newChecklistItem('Create an incident ticket', '', '/jira create'),
-                        newChecklistItem('Assign severity in description (ie. #sev-2)'),
-                        newChecklistItem('(If #sev-1) Notify @vip'),
+                        newChecklistItem('온콜 엔지니어를 채널에 추가'),
+                        newChecklistItem('브릿지 콜 시작', '', '/zoom start'),
+                        newChecklistItem('현재 상황으로 설명 업데이트'),
+                        newChecklistItem('인시던트 티켓 생성', '', '/jira create'),
+                        newChecklistItem('설명에 심각도 지정 (예: #sev-2)'),
+                        newChecklistItem('(만약 #sev-1) @vip에게 알림'),
                     ],
                 },
                 {
-                    title: 'Investigate cause',
+                    title: '원인 조사',
                     items: [
-                        newChecklistItem('Add suspected causes here and check off if eliminated'),
+                        newChecklistItem('의심되는 원인을 여기에 추가하고 제거 시 체크'),
                     ],
                 },
                 {
-                    title: 'Resolution',
+                    title: '해결',
                     items: [
-                        newChecklistItem('Confirm issue has been resolved'),
-                        newChecklistItem('Notify customer success managers'),
-                        newChecklistItem('(If sev-1) Notify leader team'),
+                        newChecklistItem('문제가 해결되었는지 확인'),
+                        newChecklistItem('고객 성공 매니저에게 알림'),
+                        newChecklistItem('(sev-1인 경우) 리더 팀에 알림'),
                     ],
                 },
                 {
-                    title: 'Retrospective',
+                    title: '회고',
                     items: [
-                        newChecklistItem('Send out survey to participants'),
-                        newChecklistItem('Schedule post-mortem meeting'),
-                        newChecklistItem('Save key messages as timeline entries'),
-                        newChecklistItem('Publish retrospective report'),
+                        newChecklistItem('참여자에게 설문조사 발송'),
+                        newChecklistItem('포스트모템 미팅 일정 잡기'),
+                        newChecklistItem('주요 메시지를 타임라인 항목으로 저장'),
+                        newChecklistItem('회고 보고서 게시'),
                     ],
                 },
             ],
@@ -200,42 +200,42 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
             channel_name_template: 'Incident: <name>',
             message_on_join_enabled: true,
             message_on_join:
-                mtrim`Hello and welcome!
+                mtrim`안녕하세요!
 
-                This channel was created as part of the **Incident Resolution** playbook and is where conversations related to this release are held. You can customize this message using markdown so that every new channel member can be welcomed with helpful context and resources.`,
+                이 채널은 **인시던트 해결(Incident Resolution)** 플레이북의 일부로 생성되었으며, 이 릴리즈와 관련된 대화가 이루어집니다. 이 메시지는 마크다운으로 자유롭게 수정할 수 있으며, 새로운 채널 멤버가 유용한 맥락과 리소스를 안내받을 수 있도록 맞춤화할 수 있습니다.`,
             run_summary_template_enabled: true,
             run_summary_template:
-                mtrim`**Summary**
+                mtrim`**요약**
 
-                **Customer impact**
+                **고객 영향**
 
-                **About**
-                - Severity: #sev-1/2/3
-                - Responders:
-                - ETA to resolution:`,
+                **세부 정보**
+                - 심각도: #sev-1/2/3
+                - 대응자:
+                - 해결 예상 시간:`,
             reminder_message_template: '',
             reminder_timer_default_seconds: 60 * 60, // 1 hour
             retrospective_template:
-                mtrim`### Summary
-                This should contain 2-3 sentences that give a reader an overview of what happened, what was the cause, and what was done. The briefer the better as this is what future teams will look at first for reference.
+                mtrim`### 요약
+                이 섹션에는 무슨 일이 있었는지, 원인이 무엇이었는지, 그리고 어떤 조치가 이루어졌는지에 대한 2~3문장의 간단한 개요를 작성하세요. 간결할수록 좋으며, 미래의 팀이 참고할 때 가장 먼저 보게 될 내용입니다.
 
-                ### What was the impact?
-                This section describes the impact of this playbook run as experienced by internal and external customers as well as stakeholders.
+                ### 영향
+                이 플레이북 실행이 내부 및 외부 고객, 그리고 이해관계자에게 어떤 영향을 미쳤는지 설명하세요.
 
-                ### What were the contributing factors?
-                This playbook may be a reactive protocol to a situation that is otherwise undesirable. If that's the case, this section explains the reasons that caused the situation in the first place. There may be multiple root causes - this helps stakeholders understand why.
+                ### 기여 요인
+                이 플레이북이 바람직하지 않은 상황에 대한 대응 프로토콜이라면, 이 섹션에서 그 상황이 발생한 원인을 설명하세요. 여러 개의 근본 원인이 있을 수 있으며, 이를 통해 이해관계자들이 이유를 파악할 수 있습니다.
 
-                ### What was done?
-                This section tells the story of how the team collaborated throughout the event to achieve the outcome. This will help future teams learn from this experience on what they could try.
+                ### 수행한 일
+                이 섹션에서는 팀이 사건을 해결하기 위해 어떻게 협업했는지에 대한 이야기를 작성하세요. 이를 통해 미래의 팀이 어떤 시도를 해볼 수 있을지 배울 수 있습니다.
 
-                ### What did we learn?
-                This section should include perspective from everyone that was involved to celebrate the victories and identify areas for improvement. For example: What went well? What didn't go well? What should be done differently next time?
+                ### 배운 점
+                이 섹션에는 모든 참여자의 관점을 포함하여 잘된 점, 개선이 필요한 점, 다음에 다르게 해야 할 점 등을 작성하세요.
 
-                ### Follow-up tasks
-                This section lists the action items to turn learnings into changes that help the team become more proficient with iterations. It could include tweaking the playbook, publishing the retrospective, or other improvements. The best follow-ups will have a clear owner assigned as well as due date.
+                ### 후속 작업
+                이 섹션에는 배운 점을 바탕으로 팀이 더 나은 반복을 할 수 있도록 변경해야 할 액션 아이템을 나열하세요. 플레이북 수정, 회고 게시, 기타 개선 사항 등이 포함될 수 있습니다. 가장 좋은 후속 작업은 명확한 담당자와 마감일이 지정되어 있습니다.
 
-                ### Timeline highlights
-                This section is a curated log that details the most important moments. It can contain key communications, screen shots, or other artifacts. Use the built-in timeline feature to help you retrace and replay the sequence of events.`,
+                ### 주요 타임라인
+                이 섹션은 가장 중요한 순간들을 기록한 큐레이션된 로그입니다. 주요 커뮤니케이션, 스크린샷, 기타 자료를 포함할 수 있습니다. 내장된 타임라인 기능을 활용하여 사건의 흐름을 되짚어보세요.`,
             retrospective_reminder_interval_seconds: 24 * 60 * 60, // 24 hours
             signal_any_keywords_enabled: true,
             signal_any_keywords: ['sev-1', 'sev-2', '#incident', 'this is serious'],
@@ -250,85 +250,85 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         template: {
             ...emptyPlaybook(),
             title: 'CUSTOMER.ONBOARDING.TITLE',
-            description: mtrim`New Mattermost customers are onboarded following a process similar to this playbook.
+            description: mtrim`새로운 Mattermost 고객은 이 플레이북과 유사한 프로세스를 따라 온보딩됩니다.
 
-            Customize this playbook to reflect your own customer onboarding process.`,
+            이 플레이북을 귀사의 고객 온보딩 프로세스에 맞게 자유롭게 커스터마이즈하세요.`,
             checklists: [
                 {
-                    title: 'Sales to Post-Sales Handoff',
+                    title: '영업-고객 성공팀 인수인계',
                     items: [
-                        newChecklistItem('AE intro CSM and CSE to key contacts'),
-                        newChecklistItem('Create customer account Drive folder'),
-                        newChecklistItem('Welcome email within 24hr of Closed Won'),
-                        newChecklistItem('Schedule initial kickoff call with customer'),
-                        newChecklistItem('Create account plan (Tier 1 or 2)'),
-                        newChecklistItem('Send discovery Survey'),
+                        newChecklistItem('AE가 CSM 및 CSE를 주요 연락처에 소개'),
+                        newChecklistItem('고객 계정용 드라이브 폴더 생성'),
+                        newChecklistItem('Closed Won 후 24시간 이내 환영 이메일 발송'),
+                        newChecklistItem('고객과 초기 킥오프 콜 일정 잡기'),
+                        newChecklistItem('계정 플랜 작성 (1, 2등급)'),
+                        newChecklistItem('디스커버리 설문 발송'),
                     ],
                 },
                 {
-                    title: 'Customer Technical Onboarding',
+                    title: '고객 기술 온보딩',
                     items: [
-                        newChecklistItem('Schedule technical discovery call'),
-                        newChecklistItem('Review current Zendesk tickets and updates'),
-                        newChecklistItem('Log customer technical details in Salesforce'),
-                        newChecklistItem('Confirm customer received technical discovery summary package'),
-                        newChecklistItem('Send current Mattermost "Pen Test" report to customer'),
-                        newChecklistItem('Schedule plugin/integration planning session'),
-                        newChecklistItem('Confirm data migration plans'),
-                        newChecklistItem('Extend Mattermost with integrations'),
-                        newChecklistItem('Confirm functional & load test plans'),
-                        newChecklistItem('Confirm team/channel organization'),
-                        newChecklistItem('Sign up for Mattermost blog for releases and announcements'),
-                        newChecklistItem('Confirm next upgrade version'),
+                        newChecklistItem('기술 디스커버리 콜 일정 잡기'),
+                        newChecklistItem('현재 Zendesk 티켓 및 업데이트 검토'),
+                        newChecklistItem('고객 기술 세부정보를 Salesforce에 기록'),
+                        newChecklistItem('고객이 기술 디스커버리 요약 패키지를 수령했는지 확인'),
+                        newChecklistItem('최신 Mattermost "Pen Test" 리포트 고객에게 발송'),
+                        newChecklistItem('플러그인/통합 기획 세션 일정 잡기'),
+                        newChecklistItem('데이터 마이그레이션 계획 확인'),
+                        newChecklistItem('통합을 통해 Mattermost 확장'),
+                        newChecklistItem('기능 및 부하 테스트 계획 확인'),
+                        newChecklistItem('팀/채널 구성 확인'),
+                        newChecklistItem('릴리즈 및 공지용 Mattermost 블로그 구독'),
+                        newChecklistItem('다음 업그레이드 버전 확인'),
                     ],
                 },
                 {
                     title: 'Go-Live',
                     items: [
-                        newChecklistItem('Order Mattermost swag package for project team'),
-                        newChecklistItem('Confirm end-user roll-out plan'),
-                        newChecklistItem('Confirm customer go-live'),
-                        newChecklistItem('Perform post go-live retrospective'),
+                        newChecklistItem('프로젝트 팀용 Mattermost 굿즈 패키지 주문'),
+                        newChecklistItem('최종 사용자 롤아웃 계획 확인'),
+                        newChecklistItem('고객 Go-Live 확인'),
+                        newChecklistItem('Go-Live 이후 회고 진행'),
                     ],
                 },
                 {
-                    title: 'Optional value prompts after go-live',
+                    title: 'Go-Live 이후 선택적 가치 제안',
                     items: [
-                        newChecklistItem('Intro playbooks and boards'),
-                        newChecklistItem('Inform upgrading Mattermost 101'),
-                        newChecklistItem('Share tips & tricks w/ DevOps focus'),
-                        newChecklistItem('Share tips & tricks w/ efficiency focus'),
-                        newChecklistItem('Schedule quarterly roadmap review w/ product team'),
-                        newChecklistItem('Review with executives (Tier 1 or 2)'),
+                        newChecklistItem('플레이북 및 보드 소개'),
+                        newChecklistItem('Mattermost 101 업그레이드 안내'),
+                        newChecklistItem('DevOps 중심의 팁 & 트릭 공유'),
+                        newChecklistItem('효율성 중심의 팁 & 트릭 공유'),
+                        newChecklistItem('제품팀과 분기별 로드맵 리뷰 일정 잡기'),
+                        newChecklistItem('임원진과 리뷰 (1, 2등급)'),
                     ],
                 },
             ],
             create_public_playbook_run: false,
-            channel_name_template: 'Customer Onboarding: <name>',
+            channel_name_template: '고객 온보딩: <name>',
             message_on_join_enabled: true,
             message_on_join:
-                mtrim`Hello and welcome!
+                mtrim`안녕하세요, 환영합니다!
 
-                This channel was created as part of the **Customer Onboarding** playbook and is where conversations related to this customer are held. You can customize this message using markdown so that every new channel member can be welcomed with helpful context and resources.`,
+                이 채널은 **고객 온보딩** 플레이북의 일부로 생성되었으며, 해당 고객과 관련된 대화가 이루어집니다. 이 메시지는 마크다운으로 자유롭게 수정할 수 있으며, 새로운 채널 멤버가 유용한 맥락과 리소스를 안내받을 수 있도록 맞춤화할 수 있습니다.`,
             run_summary_template_enabled: true,
             run_summary_template:
-                mtrim`**About**
-                - Account name: [TBD](#)
-                - Salesforce opportunity: [TBD](#)
-                - Order type:
-                - Close date:
+                mtrim`**개요**
+                - 계정명: [미정](#)
+                - Salesforce 기회: [미정](#)
+                - 주문 유형:
+                - 계약 마감일:
 
-                **Team**
-                - Sales Rep: @TBD
-                - Customer Success Manager: @TBD`,
+                **팀**
+                - 영업 담당자: @미정
+                - 고객 성공 매니저: @미정`,
             retrospective_template:
-                mtrim`### What went well?
+                mtrim`### 잘된 점은 무엇이었나요?
                 -
 
-                ### What could have gone better?
+                ### 더 잘할 수 있었던 점은?
                 -
 
-                ### What should be changed for next time?
+                ### 다음에는 무엇을 바꿔야 할까요?
                 - `,
             retrospective_reminder_interval_seconds: 0, // Once
         },
@@ -342,98 +342,98 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         template: {
             ...emptyPlaybook(),
             title: 'EMPLOYEE.ONBOARDING.TITLE',
-            description: mtrim`Every new Mattermost Staff member completes this onboarding process when joining the company.
+            description: mtrim`모든 새로운 Mattermost 직원은 입사 시 이 온보딩 프로세스를 완료합니다.
 
-            Customize this playbook to reflect your own employee onboarding process.`,
+            이 플레이북을 귀사의 직원 온보딩 프로세스에 맞게 자유롭게 커스터마이즈하세요.`,
             checklists: [
                 {
-                    title: 'Pre-day one',
+                    title: '첫 출근 전',
                     items: [
-                        newChecklistItem('Complete the [Onboarding Systems Form in the IT HelpDesk](https://helpdesk.mattermost.com/support/home)'),
+                        newChecklistItem('[IT 헬프데스크에서 온보딩 시스템 양식 작성 완료](https://helpdesk.mattermost.com/support/home)'),
                         newChecklistItem(
-                            'Complete the onboarding template prior to your new staff member\'s start date',
-                            mtrim`Managers play a large role in setting their new direct report up for success and making them feel welcome by setting clear expectations and preparing the team and internal stakeholders for how they can help new colleagues integrate and connect organizationally and culturally.
-                                * **Onboarding Objectives:** Clarify the areas and projects your new team member should focus on in their first 90 days. Use the _Overview of the Role_ that you completed when you opened the role.
-                                * **AOR clarity:** Identify AORs that are relevant for your new hire, and indicate any AORs that your new hire will [DRI](https://handbook.mattermost.com/company/about-mattermost/list-of-terms#dri) or act as backup DRI. As needed, clarify AOR transitions with internal stakeholders ahead of your new hire's start date. See [AOR page](https://handbook.mattermost.com/operations/operations/areas-of-responsibility) Include the interview panel and their respective focus areas.
-                                * **Assign an Onboarding Peer:** The Onboarding Peer or peers should be an individual or group of people that can help answer questions about the team, department and Mattermost. In many ways, an Onboarding Peer may be an [end-boss](https://handbook.mattermost.com/company/about-mattermost/mindsets#mini-boss-end-boss) for specific AORs. Managers should ask permission of a potential Onboarding Peer prior to assignment.`,
+                            '신규 직원의 입사일 전에 온보딩 템플릿 작성 완료',
+                            mtrim`매니저는 신규 직원이 성공적으로 적응하고 환영받을 수 있도록 명확한 기대치를 설정하고, 팀과 내부 이해관계자에게 신규 동료가 조직 및 문화적으로 잘 통합될 수 있도록 준비하는 데 중요한 역할을 합니다.
+                                * **온보딩 목표:** 신규 팀원이 입사 후 90일 동안 집중해야 할 영역과 프로젝트를 명확히 합니다. 역할을 오픈할 때 작성한 _역할 개요_를 참고하세요.
+                                * **AOR 명확화:** 신규 입사자와 관련된 AOR(책임 영역)을 식별하고, 신규 입사자가 [DRI](https://handbook.mattermost.com/company/about-mattermost/list-of-terms#dri) 또는 백업 DRI로 지정될 AOR을 표시하세요. 필요하다면 입사 전에 내부 이해관계자와 AOR 이관을 명확히 하세요. [AOR 페이지](https://handbook.mattermost.com/operations/operations/areas-of-responsibility) 참고. 면접 패널과 각자의 주요 역할도 포함하세요.
+                                * **온보딩 피어 지정:** 온보딩 피어나 피어 그룹은 팀, 부서, Mattermost에 대해 질문에 답할 수 있는 사람이어야 합니다. 많은 경우 온보딩 피어는 특정 AOR의 [엔드-보스](https://handbook.mattermost.com/company/about-mattermost/mindsets#mini-boss-end-boss) 역할을 할 수 있습니다. 매니저는 지정 전에 해당 피어의 동의를 구해야 합니다.`,
                         ),
                     ],
                 },
                 {
-                    title: 'Week one',
+                    title: '첫 주',
                     items: [
                         newChecklistItem(
-                            'Introduce our new staff member in the [Welcome Channel](https://community.mattermost.com/private-core/channels/welcome)',
-                            mtrim`All new hires are asked to complete a short bio and share with their Managers. Managers should include this bio in the welcome message.
+                            '[Welcome Channel](https://community.mattermost.com/private-core/channels/welcome)에서 신규 직원을 소개하세요',
+                            mtrim`모든 신규 입사자는 간단한 자기소개를 작성해 매니저에게 전달해야 합니다. 매니저는 이 자기소개를 환영 메시지에 포함해야 합니다.
 
-                                Be sure to include the hashtag \#newcolleague when posting your message.`,
+                                메시지에 \#newcolleague 해시태그를 꼭 포함하세요.`,
                         ),
                         newChecklistItem(
-                            'Review Team [AORs](https://handbook.mattermost.com/operations/operations/areas-of-responsibility)',
-                            'This is also a good time to review the new hire\'s AOR and onboarding expectations.'
+                            '팀 [AOR](https://handbook.mattermost.com/operations/operations/areas-of-responsibility) 검토',
+                            '이 시기는 신규 입사자의 AOR과 온보딩 기대치를 함께 검토하기에 좋은 시기입니다.'
                         ),
                         newChecklistItem(
-                            'Review list of key internal partners',
-                            'These are individuals the new staff member will work with and who the new staff member should set up meetings with during their first month or two.',
+                            '주요 내부 파트너 목록 검토',
+                            '신규 직원이 함께 일하게 될 주요 인물들을 확인하고, 입사 후 1~2개월 내에 미팅을 잡을 수 있도록 안내하세요.',
                         ),
                         newChecklistItem(
-                            'Add to Mattermost channels',
-                            'Ensure your team member is added to appropriate channels based on team and role.',
+                            'Mattermost 채널에 추가',
+                            '팀원 역할과 팀에 맞는 적절한 채널에 신규 직원을 추가했는지 확인하세요.',
                         ),
                         newChecklistItem(
-                            'Share team cadences',
-                            'Review specific team cadences, operating norms and relevant playbooks.',
+                            '팀의 정기 미팅 및 운영 규칙 공유',
+                            '팀의 정기 미팅, 운영 규범, 관련 플레이북을 함께 검토하세요.',
                         ),
                     ],
                 },
                 {
-                    title: 'Month one',
+                    title: '첫 달',
                     items: [
-                        newChecklistItem('Review Company and Team [V2MOMs](https://handbook.mattermost.com/company/how-to-guides-for-staff/how-to-v2mom)'),
-                        newChecklistItem('Align on role responsibilities and expectations'),
+                        newChecklistItem('회사 및 팀 [V2MOMs](https://handbook.mattermost.com/company/how-to-guides-for-staff/how-to-v2mom) 검토'),
+                        newChecklistItem('역할 및 책임, 기대치 정렬'),
                         newChecklistItem(
-                            'COM Introduction',
-                            'New team members are invited to introduce themselves at [COM](https://handbook.mattermost.com/operations/operations/company-cadence#customer-obsession-meeting-aka-com) during their second week. If they\'re not comfortable doing their own introduction, Managers will do so on their behalf.',
+                            'COM 미팅에서 자기소개',
+                            '[COM](https://handbook.mattermost.com/operations/operations/company-cadence#customer-obsession-meeting-aka-com) 미팅에서 2주차에 신규 직원이 자기소개를 하도록 안내하세요. 본인이 직접 소개하기 어렵다면 매니저가 대신 소개할 수 있습니다.',
                         ),
                         newChecklistItem(
                             '[Shoulder Check](https://handbook.mattermost.com/company/about-mattermost/mindsets#shoulder-check)',
-                            'Assess potential blindspots and ask for feedback.',
+                            '잠재적인 블라인드 스팟을 점검하고 피드백을 요청하세요.',
                         ),
                     ],
                 },
                 {
-                    title: 'Month two',
+                    title: '둘째 달',
                     items: [
                         newChecklistItem(
-                            '90-day New Colleague Feedback',
-                            'Managers are notified to kick off the [New Colleague Review Process](https://handbook.mattermost.com/contributors/onboarding#new-colleague-90-day-feedback-process) on their new staff member\'s 65th day. The feedback will include a summary of the new staff member\'s responsibilities during the first 90 days. Managers should communicate these responsibilities to the new staff member during their first week.',
+                            '90일 신규 동료 피드백',
+                            '매니저는 신규 직원의 입사 65일째에 [신규 동료 리뷰 프로세스](https://handbook.mattermost.com/contributors/onboarding#new-colleague-90-day-feedback-process)를 시작하라는 알림을 받습니다. 피드백에는 입사 후 90일 동안의 주요 책임 요약이 포함됩니다. 매니저는 이 책임을 입사 첫 주에 신규 직원에게 명확히 전달해야 합니다.',
                         ),
                     ],
                 },
                 {
-                    title: 'Month three',
+                    title: '셋째 달',
                     items: [
-                        newChecklistItem('Deliver New Colleague Feedback'),
+                        newChecklistItem('신규 동료 피드백 전달'),
                     ],
                 },
             ],
             create_public_playbook_run: false,
-            channel_name_template: 'Employee Onboarding: <name>',
+            channel_name_template: '직원 온보딩: <name>',
             message_on_join_enabled: true,
             message_on_join:
-                mtrim`Hello and welcome!
+                mtrim`안녕하세요, 환영합니다!
 
-                This channel was created as part of the **Employee Onboarding** playbook and is where conversations related to onboarding this employee are held. You can customize this message using markdown so that every new channel member can be welcomed with helpful context and resources.`,
+                이 채널은 **직원 온보딩** 플레이북의 일부로 생성되었으며, 이 직원의 온보딩과 관련된 대화가 이루어집니다. 이 메시지는 마크다운으로 자유롭게 수정할 수 있으며, 새로운 채널 멤버가 유용한 맥락과 리소스를 안내받을 수 있도록 맞춤화할 수 있습니다.`,
             run_summary_template: '',
-            reminder_timer_default_seconds: 7 * 24 * 60 * 60, // once a week
+            reminder_timer_default_seconds: 7 * 24 * 60 * 60, // 주 1회
             retrospective_template:
-                mtrim`### What went well?
+                mtrim`### 잘된 점은 무엇이었나요?
                 -
 
-                ### What could have gone better?
+                ### 더 잘할 수 있었던 점은?
                 -
 
-                ### What should be changed for next time?
+                ### 다음에는 무엇을 바꿔야 할까요?
                 - `,
             retrospective_reminder_interval_seconds: 0, // Once
         },
@@ -450,113 +450,113 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
             description: 'FEATURE.LIFECYCLE.DESCRIPTION',
             checklists: [
                 {
-                    title: 'Plan',
+                    title: '기획',
                     items: [
-                        newChecklistItem('Explain what the problem is and why it\'s important'),
-                        newChecklistItem('Explain proposal for potential solutions'),
-                        newChecklistItem('List out open questions and assumptions'),
-                        newChecklistItem('Set the target release date'),
+                        newChecklistItem('문제가 무엇이고 왜 중요한지 설명하기'),
+                        newChecklistItem('잠재적 해결책에 대한 제안 설명하기'),
+                        newChecklistItem('열린 질문과 가정 사항 나열하기'),
+                        newChecklistItem('목표 출시일 설정하기'),
                     ],
                 },
                 {
-                    title: 'Kickoff',
+                    title: '킥오프',
                     items: [
                         newChecklistItem(
-                            'Choose an engineering owner for the feature',
-                            mtrim`Expectations for the owner:
-                            - Responsible for setting and meeting expectation for target dates' +
-                            - Post weekly status update' +
-                            - Demo feature at R&D meeting' +
-                            - Ensure technical quality after release`,
+                            '기능의 엔지니어링 오너 선정',
+                            mtrim`오너의 기대 역할:
+                            - 목표 날짜에 대한 기대를 설정하고 달성할 책임
+                            - 주간 상태 업데이트 게시
+                            - R&D 미팅에서 기능 데모
+                            - 출시 후 기술 품질 보장`,
                         ),
-                        newChecklistItem('Identify and invite contributors to the feature channel'),
+                        newChecklistItem('기능 채널에 기여자 식별 및 초대'),
                         newChecklistItem(
-                            'Schedule kickoff and recurring check-in meetings',
-                            mtrim`Expectations leaving the kickoff meeting:
-                            - Alignment on the precise problem in addition to rough scope and target
-                            - Clear next steps and deliverables for each individual`,
-                        ),
-                    ],
-                },
-                {
-                    title: 'Build',
-                    items: [
-                        newChecklistItem(
-                            'Align on scope, quality, and time.',
-                            'There are likely many different efforts to achieve alignment here, this checkbox just symbolizes sign-off from contributors.',
-                        ),
-                        newChecklistItem('Breakdown feature milestones and add them to this checklist'),
-                    ],
-                },
-                {
-                    title: 'Ship',
-                    items: [
-                        newChecklistItem('Update documentation and user guides'),
-                        newChecklistItem('Merge all feature and bug PRs to master'),
-                        newChecklistItem(
-                            'Demo to the community',
-                            mtrim`For example:
-                            - R&D meeting
-                            - Developer meeting
-                            - Company wide meeting`
-                        ),
-                        newChecklistItem('Build telemetry dashboard to measure adoption'),
-                        newChecklistItem(
-                            'Create launch kit for go-to-market teams',
-                            mtrim`Including but not exclusive to:
-                            - release blog post
-                            - one-pager
-                            - demo video`,
+                            '킥오프 및 정기 체크인 미팅 일정 잡기',
+                            mtrim`킥오프 미팅 종료 시 기대 사항:
+                            - 구체적인 문제, 대략적인 범위 및 목표에 대한 정렬
+                            - 각 개인별로 명확한 다음 단계와 산출물`,
                         ),
                     ],
                 },
                 {
-                    title: 'Follow up',
+                    title: '개발',
                     items: [
-                        newChecklistItem('Schedule meeting to review adoption metrics and user feedback'),
-                        newChecklistItem('Plan improvements and next iteration'),
+                        newChecklistItem(
+                            '범위, 품질, 일정에 대한 정렬',
+                            '여기에는 정렬을 달성하기 위한 다양한 노력이 있을 수 있으며, 이 체크박스는 기여자들의 승인 완료를 상징합니다.',
+                        ),
+                        newChecklistItem('기능 마일스톤을 세분화하여 이 체크리스트에 추가'),
+                    ],
+                },
+                {
+                    title: '출시',
+                    items: [
+                        newChecklistItem('문서 및 사용자 가이드 업데이트'),
+                        newChecklistItem('모든 기능 및 버그 PR을 master에 병합'),
+                        newChecklistItem(
+                            '커뮤니티에 데모 진행',
+                            mtrim`예시:
+                            - R&D 미팅
+                            - 개발자 미팅
+                            - 전사 미팅`
+                        ),
+                        newChecklistItem('도입률 측정을 위한 텔레메트리 대시보드 구축'),
+                        newChecklistItem(
+                            'Go-to-market 팀을 위한 런치 키트 제작',
+                            mtrim`포함되지만 이에 국한되지 않음:
+                            - 출시 블로그 포스트
+                            - 원페이지 자료
+                            - 데모 영상`,
+                        ),
+                    ],
+                },
+                {
+                    title: '후속 조치',
+                    items: [
+                        newChecklistItem('도입 지표 및 사용자 피드백 검토 미팅 일정 잡기'),
+                        newChecklistItem('개선 사항 및 다음 반복 계획'),
                     ],
                 },
             ],
             create_public_playbook_run: true,
-            channel_name_template: 'Feature: <name>',
+            channel_name_template: '기능: <name>',
             message_on_join_enabled: true,
             message_on_join:
-                mtrim`Hello and welcome!
+                mtrim`안녕하세요, 환영합니다!
 
-                This channel was created as part of the **Feature Lifecycle** playbook and is where conversations related to developing this feature are held. You can customize this message using Markdown so that every new channel member can be welcomed with helpful context and resources.`,
+                이 채널은 **Feature Lifecycle** 플레이북의 일부로 생성되었으며, 이 기능 개발과 관련된 대화가 이루어집니다. 이 메시지는 마크다운으로 자유롭게 수정할 수 있으며, 새로운 채널 멤버가 유용한 맥락과 리소스를 안내받을 수 있도록 맞춤화할 수 있습니다.`,
             run_summary_template_enabled: true,
             run_summary_template:
-                mtrim`**One-liner**
-                <ie. Enable users to prescribe a description template so it\'s consistent for every run and therefore easier to read.>
+                mtrim`**한 줄 요약**
+                <예: 모든 실행에서 일관된 설명 템플릿을 지정할 수 있도록 하여 읽기 쉽게 만듭니다.>
 
-                **Targets release**
-                - Code complete: date
-                - Customer release: month
+                **목표 출시**
+                - 코드 완료: 날짜
+                - 고객 출시: 월
 
-                **Resources**
-                - Jira Epic: <link>
-                - UX prototype: <link>
-                - Technical design: <link>
-                - User docs: <link>`,
+                **참고 자료**
+                - Jira Epic: <링크>
+                - UX 프로토타입: <링크>
+                - 기술 설계: <링크>
+                - 사용자 문서: <링크>`,
             reminder_message_template:
-                mtrim`### Demo
+                mtrim`### 데모
                 <Insert_GIF_here>
 
-                ### Changes since last week
+                ### 지난주 이후 변경 사항
                 -
 
-                ### Risks
+                ### 위험 요소
                 - `,
-            reminder_timer_default_seconds: 24 * 60 * 60, // 1 day
+            reminder_timer_default_seconds: 24 * 60 * 60, // 1일
             retrospective_template:
-                mtrim`### Start
+                mtrim`### 시작할 것
                 -
 
-                ### Stop
+                ### 중단할 것
                 -
 
-                ### Keep
+                ### 유지할 것
                 - `,
             retrospective_reminder_interval_seconds: 0, // Once
         },
@@ -570,41 +570,41 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         template: {
             ...emptyPlaybook(),
             title: 'BUG.BASH.TITLE',
-            description: mtrim`About once or twice a month, the Mattermost Playbooks team uses this playbook to run a 50 minute bug-bash testing the latest version of Playbooks.
+            description: mtrim`Mattermost Playbooks 팀은 한 달에 한두 번 정도 이 플레이북을 사용하여 최신 Playbooks 버전을 테스트하는 50분간의 버그 배시(Bug Bash)를 진행합니다.
 
-            Customize this playbook to reflect your own bug bash process.`,
+            이 플레이북을 귀하의 버그 배시 프로세스에 맞게 자유롭게 커스터마이즈하세요.`,
             create_public_playbook_run: true,
             channel_name_template: 'Bug Bash (vX.Y)',
             checklists: [
                 {
-                    title: 'Setup Testing Environment (Before Meeting)',
+                    title: '테스트 환경 설정 (미팅 전)',
                     items: [
                         newChecklistItem(
-                            'Deploy the build in question to community-daily',
+                            '테스트할 빌드를 community-daily에 배포',
                         ),
                         newChecklistItem(
-                            'Spin up a cloud instance running T0',
+                            'T0 클라우드 인스턴스 생성',
                             '',
                             '/cloud create playbooks-bug-bash-t0 --license te --image mattermost/mattermost-team-edition --test-data --version master',
                         ),
                         newChecklistItem(
-                            'Spin up a cloud instance running E0',
+                            'E0 클라우드 인스턴스 생성',
                             '',
                             '/cloud create playbooks-bug-bash-e0 --license te --test-data --version master',
                         ),
                         newChecklistItem(
-                            'Spin up a cloud instance running E10',
+                            'E10 클라우드 인스턴스 생성',
                             '',
                             '/cloud create playbooks-bug-bash-e10 --license e10 --test-data --version master',
                         ),
                         newChecklistItem(
-                            'Spin up a cloud instance running E20',
+                            'E20 클라우드 인스턴스 생성',
                             '',
                             '/cloud create playbooks-bug-bash-e20 --license e20 --test-data --version master',
                         ),
                         newChecklistItem(
-                            'Enable Open Servers & CRT for all Cloud Instances',
-                            mtrim`From a command line, login to each server in turn via [\`mmctl\`](https://github.com/mattermost/mmctl), and configure, e.g.:
+                            '모든 클라우드 인스턴스에 Open Server & CRT 활성화',
+                            mtrim`명령줄에서 각 서버에 [\`mmctl\`](https://github.com/mattermost/mmctl)로 로그인한 후 다음과 같이 설정하세요:
                                 \`\`\`
                                 for server in playbooks-bug-bash-t0 playbooks-bug-bash-e0 playbooks-bug-bash-e10 playbooks-bug-bash-e20; do
                                     mmctl auth login https://$server.test.mattermost.cloud --name $server --username sysadmin --password-file <(echo "Sys@dmin123");
@@ -614,8 +614,8 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
                                 \`\`\``,
                         ),
                         newChecklistItem(
-                            'Install the plugin to each instance',
-                            mtrim`From a command line, login to each server in turn via [\`mmctl\`](https://github.com/mattermost/mmctl), and configure, e.g.:
+                            '각 인스턴스에 플러그인 설치',
+                            mtrim`명령줄에서 각 서버에 [\`mmctl\`](https://github.com/mattermost/mmctl)로 로그인한 후 다음과 같이 플러그인을 설치하세요:
                                 \`\`\`
                                 for server in playbooks-bug-bash-t0 playbooks-bug-bash-e0 playbooks-bug-bash-e10 playbooks-bug-bash-e20; do
                                     mmctl auth login https://$server.test.mattermost.cloud --name $server --username sysadmin --password-file <(echo "Sys@dmin123");
@@ -624,66 +624,66 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
                                 \`\`\``,
                         ),
                         newChecklistItem(
-                            'Announce Bug Bash',
-                            'Make sure the team and community is aware of the upcoming bug bash.',
+                            '버그 배시 공지',
+                            '팀과 커뮤니티에 다가오는 버그 배시 일정을 반드시 공지하세요.',
                         ),
                     ],
                 },
                 {
-                    title: 'Define Scope (10 Minutes)',
+                    title: '범위 정의 (10분)',
                     items: [
                         newChecklistItem(
-                            'Review GitHub commit diff',
+                            'GitHub 커밋 diff 검토',
                         ),
                         newChecklistItem(
-                            'Identify new features to add to target testing areas checklist',
+                            '테스트 대상 영역 체크리스트에 추가할 신규 기능 식별',
                         ),
                         newChecklistItem(
-                            'Identify existing functionality to add to target testing areas checklist',
+                            '테스트 대상 영역 체크리스트에 추가할 기존 기능 식별',
                         ),
                         newChecklistItem(
-                            'Add relevant T0/E0/E10/E20 permutations',
+                            '관련 T0/E0/E10/E20 조합 추가',
                         ),
                         newChecklistItem(
-                            'Assign owners',
+                            '담당자 지정',
                         ),
                     ],
                 },
                 {
-                    title: 'Target Testing Areas (30 Minutes)',
+                    title: '테스트 대상 영역 (30분)',
                     items: [],
                 },
                 {
-                    title: 'Triage (10 Minutes)',
+                    title: '트리아지 (10분)',
                     items: [
                         newChecklistItem(
-                            'Review issues to identify what to fix for the upcoming release',
+                            '다음 릴리스를 위해 수정할 이슈 검토',
                         ),
                         newChecklistItem(
-                            'Assign owners for all required bug fixes',
+                            '필요한 버그 수정 담당자 지정',
                         ),
                     ],
                 },
                 {
-                    title: 'Clean Up',
+                    title: '정리',
                     items: [
                         newChecklistItem(
-                            'Clean up cloud instance running T0',
+                            'T0 클라우드 인스턴스 정리',
                             '',
                             '/cloud delete playbooks-bug-bash-t0',
                         ),
                         newChecklistItem(
-                            'Clean up cloud instance running E0',
+                            'E0 클라우드 인스턴스 정리',
                             '',
                             '/cloud delete playbooks-bug-bash-e0',
                         ),
                         newChecklistItem(
-                            'Clean up cloud instance running E10',
+                            'E10 클라우드 인스턴스 정리',
                             '',
                             '/cloud delete playbooks-bug-bash-e10',
                         ),
                         newChecklistItem(
-                            'Clean up cloud instance running E20',
+                            'E20 클라우드 인스턴스 정리',
                             '',
                             '/cloud delete playbooks-bug-bash-e20',
                         ),
@@ -691,30 +691,30 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
                 },
             ],
             status_update_enabled: true,
-            message_on_join: mtrim`Welcome! We're using this channel to run a 50 minute bug-bash the new version of Playbooks. The first 10 minutes will be spent identifying scope and ownership, followed by 30 minutes of targeted testing in the defined areas, and 10 minutes of triage.
+            message_on_join: mtrim`환영합니다! 이 채널은 Playbooks의 새로운 버전을 테스트하는 50분간의 버그 배시를 위해 사용됩니다. 처음 10분은 범위와 담당자를 정하고, 다음 30분은 정의된 영역에서 집중 테스트, 마지막 10분은 트리아지 시간입니다.
 
-            When you find an issue, post a new thread in this channel tagged #bug and share any screenshots and reproduction steps. The owner of this bash will triage the messages into tickets as needed.`,
+            이슈를 발견하면 #bug 태그를 달아 새로운 스레드로 올리고, 스크린샷과 재현 방법을 공유해 주세요. 버그 배시의 오너가 필요에 따라 티켓으로 분류할 예정입니다.`,
             message_on_join_enabled: true,
             retrospective_enabled: false,
             run_summary_template_enabled: true,
-            run_summary_template: mtrim`The playbooks team is executing a bug bash to qualify the next shipping version.
+            run_summary_template: mtrim`Playbooks 팀은 다음 출시 버전을 검증하기 위해 버그 배시를 진행합니다.
 
-            As we encounter issues, simply start a new thread and tag with #bug (or #feature) to make tracking these easier.
+            이슈가 발견되면 새로운 스레드를 시작하고 #bug(또는 #feature) 태그를 달아 추적이 쉽도록 해주세요.
 
-            **Release Link**: TBD
+            **릴리즈 링크**: TBD
             **Zoom**: TBD
-            **Triage Filter**: https://mattermost.atlassian.net/secure/RapidBoard.jspa?rapidView=68&projectKey=MM&view=planning.nodetail&quickFilter=332&issueLimit=100
+            **트리아지 필터**: https://mattermost.atlassian.net/secure/RapidBoard.jspa?rapidView=68&projectKey=MM&view=planning.nodetail&quickFilter=332&issueLimit=100
 
-            | Servers |
+            | 서버 |
             | -- |
             | [T0](https://playbooks-bug-bash-t0.test.mattermost.cloud) |
             | [E0](https://playbooks-bug-bash-e0.test.mattermost.cloud) |
             | [E10](https://playbooks-bug-bash-e10.test.mattermost.cloud) |
             | [E20](https://playbooks-bug-bash-e20.test.mattermost.cloud) |
 
-            Login with:
+            로그인 정보:
 
-            | Username | Password |
+            | 아이디 | 비밀번호 |
             | -- | -- |
             | sysadmin | Sys@dmin123 |`,
         },
@@ -732,24 +732,24 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
             title: 'LEARN.PLAYBOOKS.TITLE',
             description: 'LEARN.PLAYBOOKS.DESCRIPTION',
             create_public_playbook_run: true,
-            channel_name_template: 'Onboarding Run',
+            channel_name_template: '온보딩 실행',
             checklists: [
                 {
-                    title: 'Learn',
+                    title: '학습',
                     items: [
-                        newChecklistItem('Try editing the run name or description in the top section of this page.'),
-                        newChecklistItem('Try checking off the first two tasks!'),
-                        newChecklistItem('Assign a task to yourself or another member.'),
-                        newChecklistItem('Post your first status update.'),
-                        newChecklistItem('Complete your first checklist!'),
+                        newChecklistItem('이 페이지 상단에서 실행 이름이나 설명을 편집해 보세요.'),
+                        newChecklistItem('첫 번째와 두 번째 작업을 체크해 보세요!'),
+                        newChecklistItem('작업을 자신이나 다른 멤버에게 할당해 보세요.'),
+                        newChecklistItem('첫 번째 상태 업데이트를 게시해 보세요.'),
+                        newChecklistItem('첫 번째 체크리스트를 완료해 보세요!'),
                     ],
                 },
                 {
-                    title: 'Collaborate',
+                    title: '협업',
                     items: [
-                        newChecklistItem('Invite other team members that you would like to collaborate with.'),
-                        newChecklistItem('Skip a task.'),
-                        newChecklistItem('Finish the run.'),
+                        newChecklistItem('함께 협업하고 싶은 팀원을 초대해 보세요.'),
+                        newChecklistItem('작업을 건너뛰어 보세요.'),
+                        newChecklistItem('실행을 완료해 보세요.'),
                     ],
                 },
             ],
@@ -759,11 +759,11 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
             message_on_join_enabled: false,
             retrospective_enabled: false,
             run_summary_template_enabled: true,
-            run_summary_template: mtrim`This summary area helps everyone involved gather context at a glance. It supports markdown syntax just like a channel message, just click to edit and try it out!
+            run_summary_template: mtrim`이 요약 영역은 모든 참여자가 한눈에 맥락을 파악할 수 있도록 도와줍니다. 채널 메시지처럼 마크다운 문법을 지원하니, 클릭해서 직접 편집해 보세요!
 
-            - Start date: 20 Dec, 2021
-            - Target date: To be determined
-            - User guide: Playbooks docs`,
+            - 시작일: 2021년 12월 20일
+            - 목표일: 추후 결정
+            - 사용자 가이드: Playbooks 문서`,
         },
     },
 ]);
