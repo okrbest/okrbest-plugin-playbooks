@@ -210,7 +210,7 @@ export function emptyPlaybook(t?: (key: string) => string): DraftPlaybookWithChe
 
 export function emptyChecklist(): Checklist {
     return {
-        title: '기본 체크리스트',
+        title: 'Default checklist',
         items: [emptyChecklistItem()],
     };
 }
@@ -279,27 +279,27 @@ Here are some resources that you may find helpful:
 
 export const defaultRetrospectiveTemplate = (t?: (key: string) => string) => {
     if (!t) {
-        return `### 요약
-이 섹션에는 무슨 일이 있었는지, 원인이 무엇이었는지, 그리고 어떤 조치가 이루어졌는지에 대한 2~3문장의 간단한 개요를 작성하세요. 간결할수록 좋으며, 미래의 팀이 참고할 때 가장 먼저 보게 될 내용입니다.
+        return `### Summary
+This should contain 2-3 sentences that give a reader an overview of what happened, what was the cause, and what was done. The briefer the better as this is what future teams will look at first for reference.
 
-### 영향
-이 플레이북 실행이 내부 및 외부 고객, 그리고 이해관계자에게 어떤 영향을 미쳤는지 설명하세요.
+### What was the impact?
+This section describes the impact of this playbook run as experienced by internal and external customers as well as stakeholders.
 
-### 기여 요인
-이 플레이북이 바람직하지 않은 상황에 대한 대응 프로토콜이라면, 이 섹션에서 그 상황이 발생한 원인을 설명하세요. 여러 개의 근본 원인이 있을 수 있으며, 이를 통해 이해관계자들이 이유를 파악할 수 있습니다.
+### What were the contributing factors?
+This playbook may be a reactive protocol to a situation that is otherwise undesirable. If that's the case, this section explains the reasons that caused the situation in the first place. There may be multiple root causes - this helps stakeholders understand why.
 
-### 수행한 일
-이 섹션에서는 팀이 사건을 해결하기 위해 어떻게 협업했는지에 대한 이야기를 작성하세요. 이를 통해 미래의 팀이 어떤 시도를 해볼 수 있을지 배울 수 있습니다.
+### What was done?
+This section tells the story of how the team collaborated throughout the event to achieve the outcome. This will help future teams learn from this experience on what they could try.
 
-### 배운 점
-이 섹션에는 모든 참여자의 관점을 포함하여 잘된 점, 개선이 필요한 점, 다음에 다르게 해야 할 점 등을 작성하세요.
+### What did we learn?
+This section should include perspective from everyone that was involved to celebrate the victories and identify areas for improvement. For example: What went well? What didn't go well? What should be done differently next time?
 
-### 후속 작업
-이 섹션에는 배운 점을 바탕으로 팀이 더 나은 반복을 할 수 있도록 변경해야 할 액션 아이템을 나열하세요. 플레이북 수정, 회고 게시, 기타 개선 사항 등이 포함될 수 있습니다. 가장 좋은 후속 작업은 명확한 담당자와 마감일이 지정되어 있습니다.
+### Follow-up tasks
+This section lists the action items to turn learnings into changes that help the team become more proficient with iterations. It could include tweaking the playbook, publishing the retrospective, or other improvements. The best follow-ups will have a clear owner as well as due date.
 
-### 주요 타임라인
-이 섹션은 가장 중요한 순간들을 기록한 큐레이션된 로그입니다. 주요 커뮤니케이션, 스크린샷, 기타 자료를 포함할 수 있습니다. 내장된 타임라인 기능을 활용하여 사건의 흐름을 되짚어보세요.`;
+### Timeline highlights
+This section is a curated log that details the most important moments. It can contain key communications, screen shots, or other artifacts. Use the built-in timeline feature to help you retrace and replay the sequence of events.`;
     }
     
     return t('wX3k9Y');
-};
+}; 
