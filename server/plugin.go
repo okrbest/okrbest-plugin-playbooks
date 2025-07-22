@@ -112,12 +112,12 @@ func (p *Plugin) OnActivate() error {
 	pluginAPIClient := pluginapi.NewClient(p.API, p.Driver)
 	p.pluginAPI = pluginAPIClient
 
-	// if !pluginapi.IsE20LicensedOrDevelopment(
-	// 	pluginAPIClient.Configuration.GetConfig(),
-	// 	pluginAPIClient.System.GetLicense(),
-	// ) {
-	// 	return errors.New("this plugin requires an enterprise license")
-	// }
+	if !pluginapi.IsE20LicensedOrDevelopment(
+		pluginAPIClient.Configuration.GetConfig(),
+		pluginAPIClient.System.GetLicense(),
+	) {
+		return errors.New("this plugin requires an enterprise license")
+	}
 
 	p.config = config.NewConfigService(pluginAPIClient, manifest)
 
