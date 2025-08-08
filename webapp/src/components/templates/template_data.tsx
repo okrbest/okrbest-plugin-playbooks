@@ -64,6 +64,95 @@ export const PresetTemplates: PresetTemplate[] = preprocessTemplates([
         },
     },
     {
+        title: 'OKR.MANAGEMENT.TITLE',
+        description: 'OKR.MANAGEMENT.DESCRIPTION',
+        icon: <ProductRelease/>,
+        color: '#C4313314',
+        author: <MattermostLogo/>,
+        template: {
+            ...emptyPlaybook(),
+            title: 'OKR.MANAGEMENT.TITLE',
+            description: 'OKR.MANAGEMENT.DESCRIPTION',
+            checklists: [
+                {
+                    title: '설정',
+                    items: [
+                        newChecklistItem('OKR 보드를 팀 변경 사항에 맞게 업데이트',
+                            mtrim`분기 동안 변경된 팀(새 리드, 프로덕트 매니저 포함)이 보드에 반영되었는지 확인하세요.`,),
+                        newChecklistItem('새로운 팀 또는 변경된 팀을 체크리스트에 반영',
+                            mtrim`분기 중 변경 사항을 고려하여, 이 플레이북에 모든 관련 팀의 작업이 포함되어 있는지 확인하세요.`,),
+                        newChecklistItem('작업 할당',
+                            mtrim`아래의 다양한 작업을 적절한 리드 또는 프로덕트 매니저에게 할당하세요.`,),
+                        newChecklistItem('리드에게 다음 분기 OKR 계획 시작 알림',
+                            '',
+                            '/echo @channel 다음 분기 OKR 계획을 시작할 준비를 하세요!'),
+                        newChecklistItem('OKR 검토를 위한 R&D 리드 세션 일정 잡기',
+                            mtrim`리드들과 OKR을 검토할 날짜를 정하고, 캘린더 초대장을 만드세요. 이 미팅은 이상적으로는 월 중반에 진행되어야 하며, 다음 분기 OKR 초안 작성과 조직에 공유 전 변경 사항 반영에 충분한 시간을 제공합니다.`,),
+                                        
+                    ],
+                },
+                {
+                    title: '발표 기록',
+                    items: [
+                        newChecklistItem('[프로덕트 팀 A]'),
+                        newChecklistItem('[프로덕트 팀 B]'),
+                        newChecklistItem('[프로덕트 팀 C]'),
+                        newChecklistItem('서버 팀'),
+                        newChecklistItem('데스크탑 앱'),
+                        newChecklistItem('모바일 앱'),
+                        newChecklistItem('QA 팀'),
+                        newChecklistItem('그로스 팀'),
+                        newChecklistItem('릴리즈 DevOps'),
+                        newChecklistItem('보안 팀'),
+                    ],
+                },
+                {
+                    title: 'OKR 주간 이후',
+                    items: [
+                        newChecklistItem('엔지니어링 OKR 완료 공지',
+                            mtrim`~announcements 채널에 엔지니어링 OKR 완료를 조직 전체에 공지하세요.`,),
+                    ],
+                },
+                {
+                    title: '회고',
+                    items: [
+                        newChecklistItem('채널 내 #retro 피드백 수집 및 비동기 검토',
+                            mtrim`채널 멤버들에게 비동기적으로 피드백을 남기고, #retro 태그로 쉽게 검토할 수 있도록 안내하세요.`,
+                            '/msg @channel 이번 분기 OKR에 대한 피드백이 있다면 이 채널에 #retro 태그와 함께 남겨주세요.'),
+                    ],
+                },
+            ],
+            create_public_playbook_run: false,
+            channel_name_template: 'QX 20YY - OKR 리뷰',
+            message_on_join_enabled: true,
+            metrics: [],
+            message_on_join:
+                mtrim`분기별 OKR 리뷰에 오신 것을 환영합니다! 이 플레이북은 매 분기 3개월차에 시작되어 다음 분기 계획 프로세스를 시작합니다.
+
+                다음 리소스가 도움이 될 수 있습니다:
+                * [팀 OKR 프로세스 문서 링크]
+                * [팀 핸드북 링크]`,
+            run_summary_template_enabled: true,
+            run_summary_template:
+                mtrim`엔지니어링 리드와 프로덕트 매니저는 이 실행을 사용하여 다음 분기 계획을 전체 R&D에 전달합니다. 우리의 타겟 오디언스는 엔지니어, 디자이너, QA입니다. 개별 기여자들이 미리 자신의 팀이 계획하고 있는 것을 알고, 다른 팀들이 무엇을 하고 있는지 엿볼 수 있도록 권한을 부여하고 싶습니다.
+
+                **분기**: QX YYYY (_월_ ~ _월_) 
+                **목표 날짜**: YYYY년 MM월 DD일
+
+                [엔지니어링 OKR 보드]
+                [엔지니어링 OKR 채널]`,
+            reminder_message_template:
+                mtrim`### 마지막 업데이트 이후 변경사항
+                -
+
+                ### 진행 상황
+                - `,
+            reminder_timer_default_seconds: 604800, 
+            retrospective_enabled: true,
+            status_update_enabled: true,
+        },
+    },
+    {
         title: 'PRODUCT.RELEASE.TITLE',
         description: 'PRODUCT.RELEASE.DESCRIPTION',
         icon: <ProductRelease/>,
