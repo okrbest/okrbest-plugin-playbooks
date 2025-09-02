@@ -204,9 +204,9 @@ const RHSRunList = (props: Props) => {
                                 onStartRunClicked={handleStartRun}
                             />
                         </NoRunsWrapper>
-                        <FeedbackWrapper>
+                        {/* <FeedbackWrapper>
                             <StyledGiveFeedbackButton tooltipPlacement='top'/>
-                        </FeedbackWrapper>
+                        </FeedbackWrapper> */}
                     </>
                 }
                 {!showNoRuns &&
@@ -235,9 +235,9 @@ const RHSRunList = (props: Props) => {
                                 <StyledLoadingSpinner/>
                             }
                         </RunsList>
-                        <FeedbackWrapper>
+                        {/* <FeedbackWrapper>
                             <StyledGiveFeedbackButton tooltipPlacement='top'/>
-                        </FeedbackWrapper>
+                        </FeedbackWrapper> */}
                     </Scrollbars>
                 }
             </Container>

@@ -70,7 +70,7 @@ const GlobalHeaderRight = () => {
 
     return (
         <>
-            <GlobalHeaderGiveFeedbackButton/>
+            {/* <GlobalHeaderGiveFeedbackButton/> */}
             <OverlayTrigger
                 trigger={['hover', 'focus']}
                 delay={OVERLAY_DELAY}

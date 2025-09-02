@@ -283,7 +283,7 @@ const RHSChecklistList = ({id, playbookRun, parentContainer, readOnly, onReadOnl
                     {formatMessage({defaultMessage: 'Finish run'})}
                 </FinishButton>
             }
-            <RHSGiveFeedbackButton/>
+            {/* <RHSGiveFeedbackButton/> */}
             {showRunDetailsChecklistsStep && (
                 <TutorialTourTip
                     title={<FormattedMessage defaultMessage='Track progress and ownership'/>}
