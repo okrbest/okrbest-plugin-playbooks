@@ -197,9 +197,17 @@ const UserLine = (props: UserLineProps) => {
         );
     }
 
+    const nameFormatter = (preferredName: string, userName: string, firstName: string, lastName: string, nickName: string) => {
+        if (firstName || lastName || nickName) {
+            const fullName = (firstName + ' ' + lastName).trim();
+            return `${userName} - ${fullName} ${nickName ? `(${nickName})` : ''}`.trim();
+        }
+        return userName;
+    };
+
     return (
         <UserLineContainer>
-            <BelowLineProfile userId={props.member.user_id}/>
+            <BelowLineProfile userId={props.member.user_id} nameFormatter={nameFormatter}/>
             {text}
         </UserLineContainer>
     );
