@@ -106,18 +106,26 @@ const ProfileAutocomplete = (props: Props) => {
         return user.id;
     };
 
+    const nameFormatter = (preferredName: string, userName: string, firstName: string, lastName: string, nickName: string) => {
+        if (firstName || lastName || nickName) {
+            const fullName = (firstName + ' ' + lastName).trim();
+            return `${userName} - ${fullName} ${nickName ? `(${nickName})` : ''}`.trim();
+        }
+        return userName;
+    };
+
     const formatOptionLabel = (option: UserProfile, context: {context: string}) => {
         // different view for selected values
         if (context.context === 'value') {
             return (
                 <React.Fragment>
-                    <StyledProfile userId={option.id}/>
+                    <StyledProfile userId={option.id} nameFormatter={nameFormatter}/>
                 </React.Fragment>
             );
         }
         return (
             <React.Fragment>
-                <Profile userId={option.id}/>
+                <Profile userId={option.id} nameFormatter={nameFormatter}/>
             </React.Fragment>
         );
     };
