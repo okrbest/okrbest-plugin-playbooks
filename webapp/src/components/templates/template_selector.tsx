@@ -7,9 +7,9 @@ import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {I18nextProvider} from 'react-i18next';
-import {useTranslation} from 'react-i18next';
-import i18n from '../../i18next-config';
+import {I18nextProvider, useTranslation} from 'react-i18next';
+
+import i18n from 'src/i18next-config';
 
 import {savePlaybook} from 'src/client';
 import {StyledSelect} from 'src/components/backstage/styles';
@@ -106,7 +106,6 @@ const TemplateSelector = ({templates}: Props) => {
                         author={template.author}
                         labelColor={template.labelColor}
                         onSelect={async () => {
-                            telemetryEventForTemplate(template.title, 'click_template_icon');
                             let username = currentUser.username;
                             const isTutorial = template.title === 'LEARN.PLAYBOOKS.TITLE';
                             if (isTutorial) {

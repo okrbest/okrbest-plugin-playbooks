@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {HashLink as Link} from 'react-router-hash-link';
 import styled, {css} from 'styled-components';
 
@@ -28,6 +29,20 @@ export const SectionHeader = ({title, link}: SectionHeaderProps) => (
         {link && <SectionLink link={link}/>}
     </SectionHeaderContainer>
 );
+
+SectionHeader.propTypes = {
+    title: PropTypes.string.isRequired,
+    link: PropTypes.oneOfType([
+        PropTypes.shape({
+            to: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+        }),
+        PropTypes.shape({
+            onClick: PropTypes.func.isRequired,
+            name: PropTypes.string.isRequired,
+        }),
+    ]),
+};
 
 const SectionLink = ({link}: {link: LinkURL | LinkHandler}) => {
     if (isLinkURL(link)) {
