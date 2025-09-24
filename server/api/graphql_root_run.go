@@ -49,6 +49,8 @@ func (r *RunRootResolver) Runs(ctx context.Context, args struct {
 	First                   *int32
 	After                   *string
 	Types                   []string
+	// Default false will be applied by the schema
+	OmitEnded bool
 }) (*RunConnectionResolver, error) {
 	c, err := getContext(ctx)
 	if err != nil {
@@ -91,6 +93,7 @@ func (r *RunRootResolver) Runs(ctx context.Context, args struct {
 		Page:                    page,
 		PerPage:                 perPage,
 		SkipExtras:              true,
+		OmitEnded:               args.OmitEnded,
 	}
 
 	runResults, err := c.playbookRunService.GetPlaybookRuns(requesterInfo, filterOptions)
@@ -262,7 +265,7 @@ func (r *RunRootResolver) AddRunParticipants(ctx context.Context, args struct {
 		}
 	}
 
-	if err := c.playbookRunService.AddParticipants(args.RunID, args.UserIDs, userID, args.ForceAddToChannel); err != nil {
+	if err := c.playbookRunService.AddParticipants(args.RunID, args.UserIDs, userID, args.ForceAddToChannel, true); err != nil {
 		return "", errors.Wrap(err, "failed to add participant from run")
 	}
 

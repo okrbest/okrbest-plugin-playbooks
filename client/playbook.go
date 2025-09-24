@@ -55,9 +55,10 @@ const (
 
 // Checklist represents a checklist in a playbook
 type Checklist struct {
-	ID    string          `json:"id"`
-	Title string          `json:"title"`
-	Items []ChecklistItem `json:"items"`
+	ID       string          `json:"id"`
+	Title    string          `json:"title"`
+	Items    []ChecklistItem `json:"items"`
+	UpdateAt int64           `json:"update_at"`
 }
 
 // ChecklistItem represents an item in a checklist
@@ -74,6 +75,7 @@ type ChecklistItem struct {
 	LastSkipped      int64        `json:"delete_at"`
 	DueDate          int64        `json:"due_date"`
 	TaskActions      []TaskAction `json:"task_actions"`
+	UpdateAt         int64        `json:"update_at"`
 }
 
 // TaskAction represents a task action in an item
@@ -170,7 +172,7 @@ var channelPlaybookTypes = [...]string{
 	PlaybookRunLinkExistingChannel: "link_existing_channel",
 }
 
-// String creates the string version of the TelemetryTrack
+// String creates the string version of the ChannelPlaybookMode
 func (cpm ChannelPlaybookMode) String() string {
 	return channelPlaybookTypes[cpm]
 }

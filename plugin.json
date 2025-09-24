@@ -5,7 +5,7 @@
   "homepage_url": "https://github.com/mattermost/mattermost-plugin-playbooks/",
   "support_url": "https://github.com/mattermost/mattermost-plugin-playbooks/issues",
   "icon_path": "assets/plugin_icon.svg",
-  "min_server_version": "7.6.0",
+  "min_server_version": "11.0.0",
   "server": {
     "executables": {
       "linux-amd64": "server/dist/plugin-linux-amd64",
@@ -41,6 +41,13 @@
         "type": "bool",
         "display_name": "Enable Experimental Features:",
         "help_text": "Enable experimental features that come with in-progress UI, bugs, and cool stuff."
+      },
+      {
+        "key": "enableincrementalupdates",
+        "type": "bool",
+        "display_name": "Enable Incremental Updates",
+        "help_text": "When enabled, sends incremental WebSocket updates instead of full playbook run objects for better performance.",
+        "default": false
       }
     ]
   }

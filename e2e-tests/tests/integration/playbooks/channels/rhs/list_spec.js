@@ -82,17 +82,6 @@ describe('channels > rhs > runlist', {testIsolation: true}, () => {
         cy.findByText('Runs in progress').should('be.visible');
     });
 
-    it('track page view', () => {
-        // # intercepts telemetry
-        cy.interceptTelemetry();
-
-        // # Navigate directly to the application and the playbook run channel
-        cy.visit(`/${testTeam.name}/channels/${testChannel.name}`);
-
-        // * Assert telemetry data
-        cy.expectTelemetryToContain([{name: 'channels_rhs_runlist', type: 'page'}]);
-    });
-
     it('can filter', () => {
         // # Click the filter menu
         cy.findByTestId('rhs-runs-filter-menu').click();
@@ -101,10 +90,13 @@ describe('channels > rhs > runlist', {testIsolation: true}, () => {
         cy.get('[data-testid="dropdownmenu"] > :nth-child(1) > div').should('have.text', numActiveRuns);
         cy.get('[data-testid="dropdownmenu"] > :nth-child(2) > div').should('have.text', numFinishedRuns);
 
-        // # Click the filter
+        // # Click the filter for finished runs
         cy.get('[data-testid="dropdownmenu"] > :nth-child(2)').click();
 
-        // * Verify displayed options
+        // # Wait for filtering to complete - API needs time to apply include_ended=true
+        cy.wait(500);
+
+        // * Verify exactly the number of finished runs are displayed
         cy.get('[data-testid="rhs-runs-list"]').children().should('have.length', numFinishedRuns);
     });
 

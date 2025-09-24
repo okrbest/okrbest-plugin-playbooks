@@ -169,24 +169,11 @@ func NewPlaybookRunStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.Play
 				ORDER BY (CASE WHEN b.UserId IS NULL THEN 0 ELSE 1 END), rp.UserId
 			) x), ''
         ) AS ConcatenatedParticipantIDs`
-	if sqlStore.db.DriverName() == model.DatabaseDriverMysql {
-		participantsCol = `
-        COALESCE(
-			(SELECT group_concat(rp.UserId separator ',')
-				FROM IR_Incident as i2
-					JOIN IR_Run_Participants as rp on rp.IncidentID = i2.ID
-					LEFT JOIN Bots b ON (b.UserId = rp.UserId)
-				WHERE i2.Id = i.Id
-				AND rp.IsParticipant = true
-				ORDER BY (CASE WHEN b.UserId IS NULL THEN 0 ELSE 1 END), rp.UserId
-			), ''
-        ) AS ConcatenatedParticipantIDs`
-	}
 
 	// When adding a PlaybookRun column #1: add to this select
 	playbookRunSelect := sqlStore.builder.
 		Select("i.ID", "i.Name AS Name", "i.Description AS Summary", "i.CommanderUserID AS OwnerUserID", "i.TeamID", "i.ChannelID",
-			"i.CreateAt", "i.EndAt", "i.DeleteAt", "i.PostID", "i.PlaybookID", "i.ReporterUserID", "i.CurrentStatus", "i.LastStatusUpdateAt",
+			"i.CreateAt", "i.UpdateAt", "i.EndAt", "i.DeleteAt", "i.PostID", "i.PlaybookID", "i.ReporterUserID", "i.CurrentStatus", "i.LastStatusUpdateAt",
 			"i.ChecklistsJSON", "COALESCE(i.ReminderPostID, '') ReminderPostID", "i.PreviousReminder",
 			"COALESCE(ReminderMessageTemplate, '') ReminderMessageTemplate", "ReminderTimerDefaultSeconds", "StatusUpdateEnabled",
 			"ConcatenatedInvitedUserIDs", "ConcatenatedInvitedGroupIDs", "DefaultCommanderID AS DefaultOwnerID",
@@ -332,17 +319,17 @@ func (s *playbookRunStore) GetPlaybookRuns(requesterInfo app.RequesterInfo, opti
 		queryForTotal = queryForTotal.Where(sq.Eq{"i.PlaybookID": options.PlaybookID})
 	}
 
+	if options.OmitEnded {
+		queryForResults = queryForResults.Where(sq.Eq{"i.EndAt": 0})
+		queryForTotal = queryForTotal.Where(sq.Eq{"i.EndAt": 0})
+	}
+
 	// TODO: do we need to sanitize (replace any '%'s in the search term)?
 	if options.SearchTerm != "" {
-		column := "i.Name"
-		searchString := options.SearchTerm
-
-		// Postgres performs a case-sensitive search, so we need to lowercase
+		// PostgreSQL performs a case-sensitive search, so we need to lowercase
 		// both the column contents and the search string
-		if s.store.db.DriverName() == model.DatabaseDriverPostgres {
-			column = "LOWER(i.Name)"
-			searchString = strings.ToLower(options.SearchTerm)
-		}
+		column := "LOWER(i.Name)"
+		searchString := strings.ToLower(options.SearchTerm)
 
 		queryForResults = queryForResults.Where(sq.Like{column: fmt.Sprint("%", searchString, "%")})
 		queryForTotal = queryForTotal.Where(sq.Like{column: fmt.Sprint("%", searchString, "%")})
@@ -358,6 +345,12 @@ func (s *playbookRunStore) GetPlaybookRuns(requesterInfo app.RequesterInfo, opti
 
 	queryForResults = queryStartedBetweenTimes(queryForResults, options.StartedGTE, options.StartedLT)
 	queryForTotal = queryStartedBetweenTimes(queryForTotal, options.StartedGTE, options.StartedLT)
+
+	// Filter by UpdateAt for the activity since parameter
+	if options.ActivitySince > 0 {
+		queryForResults = queryForResults.Where(sq.GtOrEq{"i.UpdateAt": options.ActivitySince})
+		queryForTotal = queryForTotal.Where(sq.GtOrEq{"i.UpdateAt": options.ActivitySince})
+	}
 
 	queryForResults, err := applyPlaybookRunFilterOptionsSort(queryForResults, options)
 	if err != nil {
@@ -428,13 +421,15 @@ func (s *playbookRunStore) GetPlaybookRuns(requesterInfo app.RequesterInfo, opti
 		addMetricsToPlaybookRuns(metricsData, playbookRuns)
 	}
 
-	return &app.GetPlaybookRunsResults{
+	result := &app.GetPlaybookRunsResults{
 		TotalCount: total,
 		PageCount:  pageCount,
 		PerPage:    options.PerPage,
 		HasMore:    hasMore,
 		Items:      playbookRuns,
-	}, nil
+	}
+
+	return result, nil
 }
 
 // CreatePlaybookRun creates a new playbook run. If playbook run has an ID, that ID will be used.
@@ -473,6 +468,7 @@ func (s *playbookRunStore) CreatePlaybookRun(playbookRun *app.PlaybookRun) (*app
 			"TeamID":                                  rawPlaybookRun.TeamID,
 			"ChannelID":                               rawPlaybookRun.ChannelID,
 			"CreateAt":                                rawPlaybookRun.CreateAt,
+			"UpdateAt":                                rawPlaybookRun.CreateAt,
 			"EndAt":                                   rawPlaybookRun.EndAt,
 			"PostID":                                  rawPlaybookRun.PostID,
 			"PlaybookID":                              rawPlaybookRun.PlaybookID,
@@ -525,6 +521,9 @@ func (s *playbookRunStore) UpdatePlaybookRun(playbookRun *app.PlaybookRun) (*app
 		return nil, errors.New("ID should not be empty")
 	}
 
+	// Always ensure UpdateAt is set to current time when updating
+	playbookRun.UpdateAt = model.GetMillis()
+
 	playbookRun = playbookRun.Clone()
 	playbookRun.Checklists = populateChecklistIDs(playbookRun.Checklists)
 
@@ -566,7 +565,8 @@ func (s *playbookRunStore) UpdatePlaybookRun(playbookRun *app.PlaybookRun) (*app
 			"StatusUpdateEnabled":                     rawPlaybookRun.StatusUpdateEnabled,
 			"CreateChannelMemberOnNewParticipant":     rawPlaybookRun.CreateChannelMemberOnNewParticipant,
 			"RemoveChannelMemberOnRemovedParticipant": rawPlaybookRun.RemoveChannelMemberOnRemovedParticipant,
-			"RunType": rawPlaybookRun.Type,
+			"RunType":  rawPlaybookRun.Type,
+			"UpdateAt": rawPlaybookRun.UpdateAt,
 		}).
 		Where(sq.Eq{"ID": rawPlaybookRun.ID}))
 
@@ -614,6 +614,7 @@ func (s *playbookRunStore) FinishPlaybookRun(playbookRunID string, endAt int64) 
 		SetMap(map[string]interface{}{
 			"CurrentStatus": app.StatusFinished,
 			"EndAt":         endAt,
+			"UpdateAt":      endAt,
 		}).
 		Where(sq.Eq{"ID": playbookRunID}),
 	); err != nil {
@@ -630,9 +631,22 @@ func (s *playbookRunStore) RestorePlaybookRun(playbookRunID string, restoredAt i
 			"CurrentStatus":      app.StatusInProgress,
 			"EndAt":              0,
 			"LastStatusUpdateAt": restoredAt,
+			"UpdateAt":           restoredAt,
 		}).
 		Where(sq.Eq{"ID": playbookRunID})); err != nil {
 		return errors.Wrapf(err, "failed to restore run for id '%s'", playbookRunID)
+	}
+
+	return nil
+}
+
+// BumpRunUpdatedAt updates the UpdateAt timestamp for a playbook run
+func (s *playbookRunStore) BumpRunUpdatedAt(playbookRunID string) error {
+	if _, err := s.store.execBuilder(s.store.db, sq.
+		Update("IR_Incident").
+		Set("UpdateAt", model.GetMillis()).
+		Where(sq.Eq{"ID": playbookRunID})); err != nil {
+		return errors.Wrapf(err, "failed to bump UpdateAt for playbook run '%s'", playbookRunID)
 	}
 
 	return nil
@@ -957,7 +971,8 @@ func (s *playbookRunStore) NukeDB() (err error) {
 func (s *playbookRunStore) ChangeCreationDate(playbookRunID string, creationTimestamp time.Time) error {
 	updateQuery := s.queryBuilder.Update("IR_Incident").
 		Where(sq.Eq{"ID": playbookRunID}).
-		Set("CreateAt", model.GetMillisForTime(creationTimestamp))
+		Set("CreateAt", model.GetMillisForTime(creationTimestamp)).
+		Set("UpdateAt", model.GetMillis())
 
 	sqlResult, err := s.store.execBuilder(s.store.db, updateQuery)
 	if err != nil {
@@ -1009,7 +1024,10 @@ func (s *playbookRunStore) SetBroadcastChannelIDsToRootID(playbookRunID string, 
 
 	_, err = s.store.execBuilder(s.store.db,
 		sq.Update("IR_Incident").
-			Set("ChannelIDToRootID", data).
+			SetMap(map[string]interface{}{
+				"ChannelIDToRootID": data,
+				"UpdateAt":          model.GetMillis(),
+			}).
 			Where(sq.Eq{"ID": playbookRunID}))
 	if err != nil {
 		return errors.Wrapf(err, "failed to set ChannelIDsToRootID column for playbookRunID '%s'", playbookRunID)
@@ -1131,6 +1149,12 @@ func (s *playbookRunStore) toPlaybookRun(rawPlaybookRun sqlPlaybookRun) (*app.Pl
 		playbookRun.StatusUpdateBroadcastChannelsEnabled = false
 	}
 
+	// Always compute ItemsOrder fresh from current array state to prevent data inconsistency
+	playbookRun.ItemsOrder = playbookRun.GetItemsOrder()
+	for i := range playbookRun.Checklists {
+		playbookRun.Checklists[i].ItemsOrder = playbookRun.Checklists[i].GetItemsOrder()
+	}
+
 	return &playbookRun, nil
 }
 
@@ -1146,11 +1170,7 @@ func (s *playbookRunStore) GetRunsWithAssignedTasks(userID string) ([]app.Assign
 		Where(sq.Eq{"i.CurrentStatus": app.StatusInProgress}).
 		OrderBy("i.Name")
 
-	if s.store.db.DriverName() == model.DatabaseDriverMysql {
-		query = query.Where(sq.Like{"i.ChecklistsJSON": fmt.Sprintf("%%\"%s\"%%", userID)})
-	} else {
-		query = query.Where(sq.Like{"i.ChecklistsJSON::text": fmt.Sprintf("%%\"%s\"%%", userID)})
-	}
+	query = query.Where(sq.Like{"i.ChecklistsJSON::text": fmt.Sprintf("%%\"%s\"%%", userID)})
 
 	if err := s.store.selectBuilder(s.store.db, &raw, query); err != nil {
 		return nil, errors.Wrap(err, "failed to query for assigned tasks")
@@ -1237,11 +1257,7 @@ func (s *playbookRunStore) GetOverdueUpdateRuns(userID string) ([]app.RunLink, e
 		Where(membershipClause).
 		OrderBy("i.Name")
 
-	if s.store.db.DriverName() == model.DatabaseDriverMysql {
-		query = query.Where(sq.Expr("(i.PreviousReminder / 1e6 + i.LastStatusUpdateAt) <= FLOOR(UNIX_TIMESTAMP() * 1000)"))
-	} else {
-		query = query.Where(sq.Expr("(i.PreviousReminder / 1e6 + i.LastStatusUpdateAt) <= FLOOR(EXTRACT (EPOCH FROM now())::float*1000)"))
-	}
+	query = query.Where(sq.Expr("(i.PreviousReminder / 1e6 + i.LastStatusUpdateAt) <= FLOOR(EXTRACT (EPOCH FROM now())::float*1000)"))
 
 	var ret []app.RunLink
 	if err := s.store.selectBuilder(s.store.db, &ret, query); err != nil {
@@ -1260,20 +1276,11 @@ func (s *playbookRunStore) Unfollow(playbookRunID, userID string) error {
 }
 
 func (s *playbookRunStore) updateFollowing(playbookRunID, userID string, isFollowing bool) error {
-	var err error
-	if s.store.db.DriverName() == model.DatabaseDriverMysql {
-		_, err = s.store.execBuilder(s.store.db, sq.
-			Insert("IR_Run_Participants").
-			Columns("IncidentID", "UserID", "IsFollower").
-			Values(playbookRunID, userID, isFollowing).
-			Suffix("ON DUPLICATE KEY UPDATE IsFollower = ?", isFollowing))
-	} else {
-		_, err = s.store.execBuilder(s.store.db, sq.
-			Insert("IR_Run_Participants").
-			Columns("IncidentID", "UserID", "IsFollower").
-			Values(playbookRunID, userID, isFollowing).
-			Suffix("ON CONFLICT (IncidentID,UserID) DO UPDATE SET IsFollower = ?", isFollowing))
-	}
+	_, err := s.store.execBuilder(s.store.db, sq.
+		Insert("IR_Run_Participants").
+		Columns("IncidentID", "UserID", "IsFollower").
+		Values(playbookRunID, userID, isFollowing).
+		Suffix("ON CONFLICT (IncidentID,UserID) DO UPDATE SET IsFollower = ?", isFollowing))
 
 	if err != nil {
 		return errors.Wrapf(err, "failed to upsert follower '%s' for run '%s'", userID, playbookRunID)
@@ -1324,11 +1331,7 @@ func (s *playbookRunStore) GetOverdueUpdateRunsTotal() (int64, error) {
 		Where(sq.Eq{"StatusUpdateEnabled": true}).
 		Where(sq.NotEq{"PreviousReminder": 0})
 
-	if s.store.db.DriverName() == model.DatabaseDriverMysql {
-		query = query.Where(sq.Expr("(PreviousReminder / 1e6 + LastStatusUpdateAt) <= FLOOR(UNIX_TIMESTAMP() * 1000)"))
-	} else {
-		query = query.Where(sq.Expr("(PreviousReminder / 1e6 + LastStatusUpdateAt) <= FLOOR(EXTRACT (EPOCH FROM now())::float*1000)"))
-	}
+	query = query.Where(sq.Expr("(PreviousReminder / 1e6 + LastStatusUpdateAt) <= FLOOR(EXTRACT (EPOCH FROM now())::float*1000)"))
 
 	var count int64
 	if err := s.store.getBuilder(s.store.db, &count, query); err != nil {
@@ -1456,19 +1459,11 @@ func (s *playbookRunStore) updateRunMetrics(q queryExecer, playbookRun app.Playb
 		if !validIDs[m.MetricConfigID] {
 			continue
 		}
-		if s.store.db.DriverName() == model.DatabaseDriverMysql {
-			_, err = s.store.execBuilder(q, sq.
-				Insert("IR_Metric").
-				Columns("IncidentID", "MetricConfigID", "Value", "Published").
-				Values(playbookRun.ID, m.MetricConfigID, m.Value, retrospectivePublished).
-				Suffix("ON DUPLICATE KEY UPDATE Value = ?, Published = ?", m.Value, retrospectivePublished))
-		} else {
-			_, err = s.store.execBuilder(q, sq.
-				Insert("IR_Metric").
-				Columns("IncidentID", "MetricConfigID", "Value", "Published").
-				Values(playbookRun.ID, m.MetricConfigID, m.Value, retrospectivePublished).
-				Suffix("ON CONFLICT (IncidentID,MetricConfigID) DO UPDATE SET Value = ?, Published = ?", m.Value, retrospectivePublished))
-		}
+		_, err = s.store.execBuilder(q, sq.
+			Insert("IR_Metric").
+			Columns("IncidentID", "MetricConfigID", "Value", "Published").
+			Values(playbookRun.ID, m.MetricConfigID, m.Value, retrospectivePublished).
+			Suffix("ON CONFLICT (IncidentID,MetricConfigID) DO UPDATE SET Value = ?, Published = ?", m.Value, retrospectivePublished))
 		if err != nil {
 			return errors.Wrapf(err, "failed to upsert metric value '%s'", m.MetricConfigID)
 		}
@@ -1497,24 +1492,29 @@ func (s *playbookRunStore) updateParticipating(playbookRunID string, userIDs []s
 		query = query.Values(playbookRunID, userID, isParticipating)
 	}
 
-	var err error
-	if s.store.db.DriverName() == model.DatabaseDriverMysql {
-		_, err = s.store.execBuilder(
-			s.store.db,
-			query.Suffix("ON DUPLICATE KEY UPDATE IsParticipant = ?", isParticipating),
-		)
-	} else {
-		_, err = s.store.execBuilder(
-			s.store.db,
-			query.Suffix("ON CONFLICT (IncidentID,UserID) DO UPDATE SET IsParticipant = ?", isParticipating),
-		)
-	}
+	_, err := s.store.execBuilder(
+		s.store.db,
+		query.Suffix("ON CONFLICT (IncidentID,UserID) DO UPDATE SET IsParticipant = ?", isParticipating),
+	)
 
 	if err != nil {
 		return errors.Wrapf(err, "failed to upsert participants '%+v' for run '%s'", userIDs, playbookRunID)
 	}
 
+	if err = s.touchPlaybookRun(playbookRunID); err != nil {
+		return errors.Wrapf(err, "failed to touch playbook run '%s'", playbookRunID)
+	}
+
 	return nil
+}
+
+func (s *playbookRunStore) touchPlaybookRun(playbookRunID string) error {
+	_, err := s.store.execBuilder(s.store.db, sq.
+		Update("IR_Incident").
+		Set("UpdateAt", model.GetMillis()).
+		Where(sq.Eq{"ID": playbookRunID}))
+
+	return err
 }
 
 // GetPlaybookRunIDsForUser returns run ids where user is a participant or is following
@@ -1594,6 +1594,9 @@ func populateChecklistIDs(checklists []app.Checklist) []app.Checklist {
 				newChecklists[i].Items[j].ID = model.NewId()
 			}
 		}
+
+		// Always compute ItemsOrder fresh from current items to prevent data inconsistency
+		newChecklists[i].ItemsOrder = newChecklists[i].GetItemsOrder()
 	}
 
 	return newChecklists

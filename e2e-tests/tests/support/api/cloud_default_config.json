@@ -27,6 +27,8 @@
         "EnableLatex": false,
         "EnableLegacySidebar": false,
         "ThreadAutoFollow": true,
+        "ExperimentalStrictCSRFEnforcement": false,
+        "StrictCSRFEnforcement": false,
         "CollapsedThreads": "disabled"
     },
     "TeamSettings": {
@@ -46,7 +48,6 @@
         "MaxNotificationsPerChannel": 1000,
         "EnableConfirmNotificationsToChannel": true,
         "TeammateNameDisplay": "username",
-        "ExperimentalViewArchivedChannels": false,
         "ExperimentalEnableAutomaticReplies": false,
         "LockTeammateNameDisplay": false,
         "ExperimentalPrimaryTeam": "",

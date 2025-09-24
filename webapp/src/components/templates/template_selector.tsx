@@ -11,7 +11,7 @@ import {I18nextProvider} from 'react-i18next';
 import {useTranslation} from 'react-i18next';
 import i18n from '../../i18next-config';
 
-import {savePlaybook, telemetryEventForTemplate} from 'src/client';
+import {savePlaybook} from 'src/client';
 import {StyledSelect} from 'src/components/backstage/styles';
 import {setPlaybookDefaults} from 'src/types/playbook';
 import {usePlaybooksRouting} from 'src/hooks';

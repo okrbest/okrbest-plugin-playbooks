@@ -22,12 +22,6 @@ import {
 import {setTriggerId} from 'src/actions';
 import {OwnerInfo} from 'src/types/backstage';
 import {
-    PlaybookRunEventTarget,
-    PlaybookRunViewTarget,
-    TelemetryEventTarget,
-    TelemetryViewTarget,
-} from 'src/types/telemetry';
-import {
     Checklist,
     ChecklistItem,
     ChecklistItemState,
@@ -330,8 +324,12 @@ export async function setDueDate(playbookRunId: string, checklistNum: number, it
     }
 }
 
-export async function setChecklistItemState(playbookRunID: string, checklistNum: number, itemNum: number, newState: ChecklistItemState) {
-    const body = JSON.stringify({new_state: newState});
+export async function setChecklistItemState(playbookRunID: string, checklistNum: number, itemNum: number, newState: ChecklistItemState, itemID?: string) {
+    // Include item ID in request body when available (for incremental updates)
+    const body = JSON.stringify({
+        new_state: newState,
+        ...(itemID && {item_id: itemID}),
+    });
     try {
         return await doPut<void>(`${apiUrl}/runs/${playbookRunID}/checklists/${checklistNum}/item/${itemNum}/state`, body);
     } catch (error) {
@@ -408,7 +406,7 @@ export async function clientSetChecklistItemCommand(playbookRunID: string, check
     return data;
 }
 
-export async function clientAddChecklist(playbookRunID: string, checklist: Checklist) {
+export async function clientAddChecklist(playbookRunID: string, checklist: Omit<Checklist, 'id'>) {
     const data = await doPost(`${apiUrl}/runs/${playbookRunID}/checklists`,
         JSON.stringify(checklist),
     );
@@ -480,49 +478,6 @@ export async function fetchPlaybookStats(playbookID: string): Promise<PlaybookSt
     }
 
     return data as PlaybookStats;
-}
-
-// telemetryRunAction are the event types that can be reported to telemetry server re: PlaybookRun
-// string is kept to do progressive migration to enum
-type telemetryRunAction = PlaybookRunViewTarget | PlaybookRunEventTarget | string;
-
-export async function telemetryEventForPlaybookRun(playbookRunID: string, action: telemetryRunAction) {
-    await doFetchWithoutResponse(`${apiUrl}/telemetry/run/${playbookRunID}`, {
-        method: 'POST',
-        body: JSON.stringify({action}),
-    });
-}
-
-export async function telemetryEventForPlaybook(playbookID: string, action: string) {
-    await doFetchWithoutResponse(`${apiUrl}/telemetry/playbook/${playbookID}`, {
-        method: 'POST',
-        body: JSON.stringify({action}),
-    });
-}
-
-export async function telemetryEventForTemplate(templateName: string, action: string) {
-    await doFetchWithoutResponse(`${apiUrl}/telemetry/template`, {
-        method: 'POST',
-        body: JSON.stringify({template_name: templateName, action}),
-    });
-}
-
-export async function telemetryEvent(name: TelemetryEventTarget, properties: {[key: string]: string}) {
-    await doFetchWithoutResponse(`${apiUrl}/telemetry`, {
-        method: 'POST',
-        body: JSON.stringify(
-            {name, type: 'track', properties}
-        ),
-    });
-}
-
-export async function telemetryView(name: TelemetryViewTarget, properties: {[key: string]: string}) {
-    await doFetchWithoutResponse(`${apiUrl}/telemetry`, {
-        method: 'POST',
-        body: JSON.stringify(
-            {name, type: 'page', properties}
-        ),
-    });
 }
 
 export async function fetchGlobalSettings(): Promise<GlobalSettings> {

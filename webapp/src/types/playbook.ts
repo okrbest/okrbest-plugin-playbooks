@@ -66,9 +66,12 @@ export interface PlaybookWithChecklist extends Playbook {
     // Deprecated: preserved for backwards compatibility with v1.27
     broadcast_enabled: boolean;
     webhook_on_creation_enabled: boolean;
+
+    // Property fields from GraphQL
+    propertyFields: PropertyField[];
 }
 
-import {MetricType} from 'src/graphql/generated/graphql';
+import {MetricType, PropertyField} from 'src/graphql/generated/graphql';
 
 export {MetricType};
 
@@ -98,8 +101,11 @@ export interface FetchPlaybooksReturn {
 }
 
 export interface Checklist {
+    id?: string;
     title: string;
     items: ChecklistItem[];
+    update_at?: number; // Timestamp for idempotency checks
+    items_order?: string[]; // Order of checklist items
 }
 
 export enum ChecklistItemState {
@@ -121,6 +127,7 @@ export interface ChecklistItem {
     command_last_run: number;
     due_date: number;
     task_actions: TaskAction[];
+    update_at?: number; // Timestamp for idempotency checks
 }
 
 export interface TaskAction {
@@ -205,6 +212,7 @@ export function emptyPlaybook(t?: (key: string) => string): DraftPlaybookWithChe
         remove_channel_member_on_removed_participant: true,
         channel_id: '',
         channel_mode: 'create_new_channel',
+        propertyFields: [],
     };
 }
 

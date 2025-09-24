@@ -25,10 +25,6 @@ import {Role} from 'src/components/backstage/playbook_runs/shared';
 
 import {PlaybookRun} from 'src/types/playbook_run';
 
-import {telemetryEvent} from 'src/client';
-
-import {PlaybookRunEventTarget} from 'src/types/telemetry';
-
 import {SendMessageButton} from './send_message_button';
 import AddParticipantsModal from './add_participant_modal';
 
@@ -51,7 +47,6 @@ export const Participants = ({playbookRun, role, teamName}: Props) => {
     const {removeFromRun, changeRunOwner} = useManageRunMembership(playbookRun.id);
 
     const remove = (userIDs?: string[] | undefined) => {
-        telemetryEvent(PlaybookRunEventTarget.Leave, {playbookrun_id: playbookRun.id, from: 'run_details', trigger: 'remove_participant', count: userIDs?.length.toString() ?? ''});
         return removeFromRun(userIDs);
     };
 
@@ -60,8 +55,8 @@ export const Participants = ({playbookRun, role, teamName}: Props) => {
 
         //@ts-ignore
         profiles.then(({data}: { data: UserProfile[] }) => {
-            // getProfilesByIds doesn't return current user profile, so add it when a user is participant
-            if (role === Role.Participant) {
+            // getProfilesByIds doesn't return current user profile, so add it when a user is participant (prevent duplicates)
+            if (role === Role.Participant && !data.some((user) => user.id === myUser.id)) {
                 data.push(myUser);
             }
             data.sort(sortByUsername);

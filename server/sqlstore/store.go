@@ -21,6 +21,8 @@ import (
 // that we'll control manually.
 const maxJSONLength = 256 * 1024 // 256KB
 
+const DeprecatedDatabaseDriverMysql = "mysql"
+
 type SQLStore struct {
 	db        *sqlx.DB
 	builder   sq.StatementBuilderType
@@ -37,13 +39,9 @@ func New(pluginAPI PluginAPIClient, scheduler app.JobOnceScheduler) (*SQLStore, 
 	}
 	db = sqlx.NewDb(origDB, pluginAPI.Store.DriverName())
 
-	builder := sq.StatementBuilder.PlaceholderFormat(sq.Question)
-	if pluginAPI.Store.DriverName() == model.DatabaseDriverPostgres {
-		builder = builder.PlaceholderFormat(sq.Dollar)
-	}
-
-	if pluginAPI.Store.DriverName() == model.DatabaseDriverMysql {
-		db.MapperFunc(func(s string) string { return s })
+	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+	if pluginAPI.Store.DriverName() != model.DatabaseDriverPostgres {
+		return nil, errors.New("only PostgreSQL is supported")
 	}
 
 	return &SQLStore{

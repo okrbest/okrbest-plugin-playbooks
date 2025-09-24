@@ -11,7 +11,7 @@ import {GetStateFunc} from 'mattermost-redux/types/actions';
 import {makeModalDefinition as makeUpdateRunNameModalDefinition} from 'src/components/modals/run_update_name';
 import {makeModalDefinition as makeUpdateRunChannelModalDefinition} from 'src/components/modals/run_update_channel';
 import {makeModalDefinition as makePlaybookRunModalDefinition} from 'src/components/modals/run_playbook_modal';
-import {PlaybookRun} from 'src/types/playbook_run';
+import {PlaybookRun, PlaybookRunConnection} from 'src/types/playbook_run';
 import {canIPostUpdateForRun, selectToggleRHS} from 'src/selectors';
 import {BackstageRHSSection, BackstageRHSViewMode} from 'src/types/backstage_rhs';
 import {
@@ -42,10 +42,12 @@ import {
     RECEIVED_GLOBAL_SETTINGS,
     RECEIVED_PLAYBOOK_RUNS,
     RECEIVED_TEAM_PLAYBOOK_RUNS,
+    RECEIVED_TEAM_PLAYBOOK_RUN_CONNECTIONS,
     RECEIVED_TOGGLE_RHS_ACTION,
     REMOVED_FROM_CHANNEL,
     ReceivedGlobalSettings,
     ReceivedPlaybookRuns,
+    ReceivedTeamPlaybookRunConnections,
     ReceivedTeamPlaybookRuns,
     ReceivedToggleRHSAction,
     RemovedFromChannel,
@@ -74,6 +76,8 @@ import {
     ShowPlaybookActionsModal,
     ShowPostMenuModal,
     ShowRunActionsModal,
+    WEBSOCKET_PLAYBOOK_RUN_INCREMENTAL_UPDATE_RECEIVED,
+    WebsocketPlaybookRunIncrementalUpdateReceived,
 } from 'src/types/actions';
 import {clientExecuteCommand} from 'src/client';
 import {GlobalSettings} from 'src/types/settings';
@@ -272,6 +276,11 @@ export const receivedTeamPlaybookRuns = (playbookRuns: PlaybookRun[]): ReceivedT
     playbookRuns,
 });
 
+export const receivedTeamPlaybookRunConnections = (playbookRuns: PlaybookRunConnection[]): ReceivedTeamPlaybookRunConnections => ({
+    type: RECEIVED_TEAM_PLAYBOOK_RUN_CONNECTIONS,
+    playbookRuns,
+});
+
 export const removedFromPlaybookRunChannel = (channelId: string): RemovedFromChannel => ({
     type: REMOVED_FROM_CHANNEL,
     channelId,
@@ -369,4 +378,10 @@ export const openBackstageRHS = (section: BackstageRHSSection, viewMode: Backsta
 export const publishTemplates = (templates: PresetTemplate[]): PublishTemplates => ({
     type: PUBLISH_TEMPLATES,
     templates,
+});
+
+// Granular websocket event action creators
+export const websocketPlaybookRunIncrementalUpdateReceived = (data: import('src/types/websocket_events').PlaybookRunUpdate): WebsocketPlaybookRunIncrementalUpdateReceived => ({
+    type: WEBSOCKET_PLAYBOOK_RUN_INCREMENTAL_UPDATE_RECEIVED,
+    data,
 });
