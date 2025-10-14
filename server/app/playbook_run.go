@@ -223,6 +223,23 @@ func (r PlaybookRun) GetItemsOrder() []string {
 	return itemsOrder
 }
 
+// Auditable implements the model.Auditable interface for audit logging
+func (r PlaybookRun) Auditable() map[string]any {
+	return map[string]any{
+		"id":             r.ID,
+		"owner_user_id":  r.OwnerUserID,
+		"team_id":        r.TeamID,
+		"channel_id":     r.ChannelID,
+		"playbook_id":    r.PlaybookID,
+		"current_status": r.CurrentStatus,
+		"create_at":      r.CreateAt,
+		"update_at":      r.UpdateAt,
+		"end_at":         r.EndAt,
+		"type":           r.Type,
+		"public":         len(r.BroadcastChannelIDs) > 0,
+	}
+}
+
 // PlaybookRunUpdate represents an incremental update to a playbook run
 type PlaybookRunUpdate struct {
 	// ID is the unique identifier of the playbook run.
@@ -697,6 +714,15 @@ func GetChecklistItemUpdates(previous, current []ChecklistItem) ItemChanges {
 			}
 			if prev.UpdateAt != item.UpdateAt {
 				fields["update_at"] = item.UpdateAt
+			}
+			if prev.ConditionID != item.ConditionID {
+				fields["condition_id"] = item.ConditionID
+			}
+			if prev.ConditionAction != item.ConditionAction {
+				fields["condition_action"] = item.ConditionAction
+			}
+			if prev.ConditionReason != item.ConditionReason {
+				fields["condition_reason"] = item.ConditionReason
 			}
 
 			// Only add update if there are changes
@@ -1690,4 +1716,20 @@ func PropertyFieldsEqual(a, b []PropertyField) bool {
 // PropertyValuesEqual compares two slices of PropertyValue for deep equality
 func PropertyValuesEqual(a, b []PropertyValue) bool {
 	return reflect.DeepEqual(a, b)
+}
+
+// SwapConditionIDs updates checklist item condition IDs using the provided mapping
+func (r *PlaybookRun) SwapConditionIDs(conditionMapping map[string]*Condition) {
+	for i := range r.Checklists {
+		for j := range r.Checklists[i].Items {
+			item := &r.Checklists[i].Items[j]
+			if item.ConditionID != "" {
+				if newCondition, exists := conditionMapping[item.ConditionID]; exists {
+					item.ConditionID = newCondition.ID
+					item.ConditionAction = ConditionActionHidden
+					item.ConditionReason = newCondition.ConditionExpr.ToString(r.PropertyFields)
+				}
+			}
+		}
+	}
 }

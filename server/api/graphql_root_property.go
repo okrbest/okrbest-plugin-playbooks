@@ -136,6 +136,12 @@ func (r *PropertyRootResolver) UpdatePlaybookPropertyField(ctx context.Context, 
 	// Update the property field using the playbook service
 	updatedField, err := c.playbookService.UpdatePropertyField(args.PlaybookID, *propertyField)
 	if err != nil {
+		if errors.Is(err, app.ErrPropertyOptionsInUse) {
+			return "", newGraphQLError(err)
+		}
+		if errors.Is(err, app.ErrPropertyFieldTypeChangeNotAllowed) {
+			return "", newGraphQLError(err)
+		}
 		return "", errors.Wrap(err, "failed to update property field")
 	}
 
@@ -184,6 +190,9 @@ func (r *PropertyRootResolver) DeletePlaybookPropertyField(ctx context.Context, 
 	// Delete the property field using the playbook service
 	err = c.playbookService.DeletePropertyField(args.PlaybookID, args.PropertyFieldID)
 	if err != nil {
+		if errors.Is(err, app.ErrPropertyFieldInUse) {
+			return "", newGraphQLError(err)
+		}
 		return "", errors.Wrap(err, "failed to delete property field")
 	}
 
@@ -285,6 +294,10 @@ func convertPropertyFieldInputToPropertyField(input PropertyFieldInput) *app.Pro
 
 		if input.Attrs.ParentID != nil {
 			attrs.ParentID = *input.Attrs.ParentID
+		}
+
+		if input.Attrs.ValueType != nil {
+			attrs.ValueType = *input.Attrs.ValueType
 		}
 
 		propertyField.Attrs = attrs

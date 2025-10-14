@@ -30,6 +30,7 @@ func TestPlaybookService_CreatePropertyField(t *testing.T) {
 		mockStore,
 		mockPoster,
 		nil, // api client
+		nil, // pluginAPI
 		&metrics.Metrics{},
 		mockPropertyService,
 	)
@@ -117,6 +118,7 @@ func TestPlaybookService_UpdatePropertyField(t *testing.T) {
 		mockStore,
 		mockPoster,
 		nil,
+		nil, // pluginAPI
 		&metrics.Metrics{},
 		mockPropertyService,
 	)
@@ -205,6 +207,7 @@ func TestPlaybookService_DeletePropertyField(t *testing.T) {
 		mockStore,
 		mockPoster,
 		nil,
+		nil, // pluginAPI
 		&metrics.Metrics{},
 		mockPropertyService,
 	)
@@ -214,7 +217,7 @@ func TestPlaybookService_DeletePropertyField(t *testing.T) {
 
 	t.Run("success - property field deleted and playbook updated", func(t *testing.T) {
 		mockPropertyService.EXPECT().
-			DeletePropertyField(propertyID).
+			DeletePropertyField(playbookID, propertyID).
 			Return(nil)
 
 		mockStore.EXPECT().
@@ -230,7 +233,7 @@ func TestPlaybookService_DeletePropertyField(t *testing.T) {
 		expectedError := errors.New("property service error")
 
 		mockPropertyService.EXPECT().
-			DeletePropertyField(propertyID).
+			DeletePropertyField(playbookID, propertyID).
 			Return(expectedError)
 
 		err := service.DeletePropertyField(playbookID, propertyID)
@@ -243,7 +246,7 @@ func TestPlaybookService_DeletePropertyField(t *testing.T) {
 		bumpError := errors.New("failed to bump playbook timestamp")
 
 		mockPropertyService.EXPECT().
-			DeletePropertyField(propertyID).
+			DeletePropertyField(playbookID, propertyID).
 			Return(nil)
 
 		mockStore.EXPECT().
