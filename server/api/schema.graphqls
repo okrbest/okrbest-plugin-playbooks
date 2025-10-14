@@ -113,6 +113,7 @@ input ChecklistItemUpdates {
 	commandLastRun: Float!
 	dueDate: Float!
 	taskActions: [TaskActionUpdates!]
+	conditionID: String!
 }
 
 input TaskActionUpdates {
@@ -206,6 +207,9 @@ type ChecklistItem {
 	commandLastRun: Float!
 	dueDate: Float!
 	taskActions: [TaskAction!]!
+	conditionID: String!
+	conditionAction: String!
+	conditionReason: String!
 }
 
 type TaskAction {
@@ -357,6 +361,7 @@ input PropertyFieldAttrsInput {
 	sortOrder: Float
 	options: [PropertyOptionInput!]
 	parentID: String
+	valueType: String
 }
 
 input PropertyFieldInput {
@@ -376,6 +381,7 @@ type PropertyFieldAttrs {
 	sortOrder: Float!
 	options: [PropertyOption!]
 	parentID: String
+	valueType: String
 }
 
 type PropertyField {
