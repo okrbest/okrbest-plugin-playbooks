@@ -76,13 +76,15 @@ export const checkProfessionalLicensed = (license: Record<string, string>) => {
 };
 
 export const isConfiguredForDevelopment = (state: GlobalState): boolean => {
-    const config = getConfig(state);
+    // const config = getConfig(state);
 
-    return config.EnableTesting === 'true' && config.EnableDeveloper === 'true';
+    // return config.EnableTesting === 'true' && config.EnableDeveloper === 'true';
+    return true;
 };
 
 export const isCloud = (state: GlobalState): boolean => {
-    const license = getLicense(state);
+    // const license = getLicense(state);
 
-    return license?.Cloud === 'true';
+    // return license?.Cloud === 'true';
+    return true;
 };
