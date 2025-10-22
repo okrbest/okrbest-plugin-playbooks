@@ -6,13 +6,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
 import {GlobalState} from '@mattermost/types/store';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getUser as getUserAction} from 'mattermost-redux/actions/users';
 import {getUser} from 'mattermost-redux/selectors/entities/users';
-
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 
+import {displayUsername} from 'src/utils/user_utils';
 import {
     TimelineEvent,
     TimelineEventType,
