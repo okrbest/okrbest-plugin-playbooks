@@ -14,7 +14,7 @@ import {useSelector} from 'react-redux';
 
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
+import {displayUsername} from 'src/utils/user_utils';
 
 import Profile from 'src/components/profile/profile';
 
@@ -197,17 +197,9 @@ const UserLine = (props: UserLineProps) => {
         );
     }
 
-    const nameFormatter = (preferredName: string, userName: string, firstName: string, lastName: string, nickName: string) => {
-        if (firstName || lastName || nickName) {
-            const fullName = (firstName + ' ' + lastName).trim();
-            return `${userName} - ${fullName} ${nickName ? `(${nickName})` : ''}`.trim();
-        }
-        return userName;
-    };
-
     return (
         <UserLineContainer>
-            <BelowLineProfile userId={props.member.user_id} nameFormatter={nameFormatter}/>
+            <BelowLineProfile userId={props.member.user_id}/>
             {text}
         </UserLineContainer>
     );

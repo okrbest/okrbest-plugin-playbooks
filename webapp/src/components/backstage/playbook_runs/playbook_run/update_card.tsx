@@ -9,13 +9,12 @@ import React from 'react';
 import {UserProfile} from '@mattermost/types/users';
 import {GlobalState} from '@mattermost/types/store';
 import {getUserByUsername} from 'mattermost-redux/selectors/entities/users';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {Client4} from 'mattermost-redux/client';
 
 import {Timestamp, formatText, messageHtmlToComponent} from 'src/webapp_globals';
-
 import {useEnsureProfile} from 'src/hooks';
+import {displayUsername} from 'src/utils/user_utils';
 import {StatusPostComplete} from 'src/types/playbook_run';
 
 function useAuthorInfo(userName: string) : [string, string] {

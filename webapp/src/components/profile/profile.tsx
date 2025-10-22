@@ -5,7 +5,6 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {GlobalState} from '@mattermost/types/store';
 import {UserProfile} from '@mattermost/types/users';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getUser} from 'mattermost-redux/selectors/entities/users';
 import {getUser as fetchUser} from 'mattermost-redux/actions/users';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
@@ -13,6 +12,8 @@ import {Client4} from 'mattermost-redux/client';
 
 import classNames from 'classnames';
 import styled from 'styled-components';
+
+import {displayUsername} from 'src/utils/user_utils';
 
 interface Props {
     userId: string;
@@ -76,7 +77,7 @@ const Profile = (props: Props) => {
         if (!user) {
             dispatch(fetchUser(props.userId));
         }
-    }, [props.userId]);
+    }, [props.userId, user, dispatch]);
 
     let name = null;
     let profileUri = null;

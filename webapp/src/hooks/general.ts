@@ -24,13 +24,15 @@ import {Client4} from 'mattermost-redux/client';
 import {getPost as getPostFromState} from 'mattermost-redux/selectors/entities/posts';
 import {UserProfile} from '@mattermost/types/users';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {ClientError} from '@mattermost/client';
 import {useHistory, useLocation} from 'react-router-dom';
+
 import qs from 'qs';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {useUpdateEffect} from 'react-use';
 import {debounce, isEqual} from 'lodash';
+
+import {displayUsername} from 'src/utils/user_utils';
 
 import {FetchPlaybookRunsParams, PlaybookRun} from 'src/types/playbook_run';
 import {EmptyPlaybookStats} from 'src/types/stats';
