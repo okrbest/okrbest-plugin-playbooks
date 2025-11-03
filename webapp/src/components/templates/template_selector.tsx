@@ -69,11 +69,11 @@ const instantCreatePlaybook = async (template: PresetTemplate, teamID: string, u
     const pb = setPlaybookDefaults(template.template, t);
     pb.public = true;
     pb.team_id = teamID;
-    
+
     // 번역된 title과 description을 DB에 저장
     pb.title = t(template.title);
     pb.description = template.description ? t(template.description) : '';
-    
+
     if (username !== '') {
         pb.title = '@' + username + "'s " + t(template.title);
     }
@@ -88,35 +88,39 @@ const TemplateSelector = ({templates}: Props) => {
     const {edit} = usePlaybooksRouting();
     const refreshLHS = useLHSRefresh();
     const {t} = useTranslation();
-    
+
     // templates prop이 있으면 그걸, 없으면 PresetTemplates 사용
     const displayTemplates = templates ?? PresetTemplates;
 
     return (
         <I18nextProvider i18n={i18n}>
             <SelectorGrid>
-                {displayTemplates.map((template: PresetTemplate, idx: number) => (
-                    <TemplateItem
-                        // key={template.title} // key props 제거
-                        label={template.label}
-                        title={template.title}
-                        description={template.description ?? ''}
-                        color={template.color}
-                        icon={template.icon}
-                        author={template.author}
-                        labelColor={template.labelColor}
-                        onSelect={async () => {
-                            let username = currentUser.username;
-                            const isTutorial = template.title === 'LEARN.PLAYBOOKS.TITLE';
-                            if (isTutorial) {
-                                username = '';
-                            }
-                            const playbookID = await instantCreatePlaybook(template, teamId, username, t);
-                            refreshLHS();
-                            edit(playbookID);
-                        }}
-                    />
-                ))}
+                {/* eslint-disable-next-line react/no-array-index-key */}
+                {displayTemplates.map((template: PresetTemplate, idx: number) => {
+                    // @ts-ignore - key is a valid React prop for list items
+                    return (
+                        <TemplateItem
+                            key={`${template.title}-${idx}`}
+                            label={template.label}
+                            title={template.title}
+                            description={template.description ?? ''}
+                            color={template.color}
+                            icon={template.icon}
+                            author={template.author}
+                            labelColor={template.labelColor}
+                            onSelect={async () => {
+                                let username = currentUser.username;
+                                const isTutorial = template.title === 'LEARN.PLAYBOOKS.TITLE';
+                                if (isTutorial) {
+                                    username = '';
+                                }
+                                const playbookID = await instantCreatePlaybook(template, teamId, username, t);
+                                refreshLHS();
+                                edit(playbookID);
+                            }}
+                        />
+                    );
+                })}
             </SelectorGrid>
         </I18nextProvider>
     );

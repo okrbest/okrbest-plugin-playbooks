@@ -1,6 +1,8 @@
 // Copyright (c) 2020-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {useEffect, useMemo} from 'react';
+
 import {
     getRoles,
     haveIChannelPermission,
@@ -52,6 +54,31 @@ export const useHasPlaybookPermission = (permission: PlaybookPermissionGeneral, 
     const specificPermission = makeGeneralPermissionSpecific(permission, playbook?.public || false);
     const hasTeamPermision = useHasTeamPermission(playbook?.team_id || '', specificPermission);
 
+    // Calculate user roles using useMemo to stabilize the array reference
+    const userRoles = useMemo(() => {
+        if (!playbook) {
+            return [];
+        }
+
+        const member = playbook?.members.find((val: PlaybookPermissionsMember) => val.user_id === currentUserId);
+
+        if (member) {
+            return member.scheme_roles || [];
+        } else if (playbook.public) {
+            return [playbook.default_playbook_member_role];
+        }
+
+        return [];
+    }, [playbook, currentUserId]);
+
+    // Load roles if needed using useEffect to avoid side effects during render
+    useEffect(() => {
+        if (userRoles.length > 0) {
+            dispatch(loadRolesIfNeeded(userRoles));
+        }
+    }, [dispatch, userRoles]);
+
+    // Early returns after all hooks have been called
     if (hasTeamPermision) {
         return true;
     }
@@ -60,20 +87,9 @@ export const useHasPlaybookPermission = (permission: PlaybookPermissionGeneral, 
         return false;
     }
 
-    const member = playbook?.members.find((val: PlaybookPermissionsMember) => val.user_id === currentUserId);
-
-    let userRoles: string[] = [];
-    if (member) {
-        userRoles = member.scheme_roles || [];
-    } else if (playbook.public) {
-        userRoles = [playbook.default_playbook_member_role];
-    }
-
-    if (!userRoles) {
+    if (userRoles.length === 0) {
         return false;
     }
-
-    dispatch(loadRolesIfNeeded(userRoles));
 
     for (const userRole of userRoles) {
         const role = roles[userRole];
