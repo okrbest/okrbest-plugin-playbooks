@@ -317,6 +317,6 @@ export const defaultRetrospectiveTemplate = (t?: (key: string) => string) => {
 ### 주요 타임라인
 이 섹션은 가장 중요한 순간들을 기록한 큐레이션된 로그입니다. 주요 커뮤니케이션, 스크린샷, 기타 자료를 포함할 수 있습니다. 내장된 타임라인 기능을 활용하여 사건의 흐름을 되짚어보세요.`;
     }
-    
+
     return t('wX3k9Y');
 };

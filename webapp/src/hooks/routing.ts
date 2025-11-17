@@ -73,7 +73,7 @@ export function usePlaybooksRouting<TParam extends Playbook | Playbook['id']>(
             view: (p: TParam) => {
                 return go(`/playbooks/${id(p)}`, p);
             },
-            create: async (params: PlaybookCreateQueryParameters) => {
+            create: async (params: PlaybookCreateQueryParameters, inPlaybookDraft?: Partial<DraftPlaybookWithChecklist>) => {
                 const createNewPlaybook = async () => {
                     const template = PresetTemplates.find((template) => template.title === params.template);
                     const initialPlaybook: DraftPlaybookWithChecklist = setPlaybookDefaults({
@@ -81,6 +81,7 @@ export function usePlaybooksRouting<TParam extends Playbook | Playbook['id']>(
                         reminder_timer_default_seconds: 86400,
                         members: [{user_id: currentUserId, roles: [PlaybookRole.Member, PlaybookRole.Admin]}],
                         team_id: params.teamId || '',
+                        ...inPlaybookDraft,
                     }, t);
 
                     if (params.name) {
