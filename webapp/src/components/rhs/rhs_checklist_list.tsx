@@ -8,9 +8,10 @@ import styled, {css} from 'styled-components';
 
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {DateTime} from 'luxon';
 import {GlobalState} from '@mattermost/types/store';
+
+import {displayUsername} from 'src/utils/user_utils';
 
 import {PlaybookRun, PlaybookRunStatus} from 'src/types/playbook_run';
 import {PlaybookRunType} from 'src/graphql/generated/graphql';
