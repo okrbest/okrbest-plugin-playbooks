@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {I18nextProvider, useTranslation} from 'react-i18next';
 
@@ -15,6 +16,7 @@ import {savePlaybook} from 'src/client';
 import {StyledSelect} from 'src/components/backstage/styles';
 import {setPlaybookDefaults} from 'src/types/playbook';
 import {usePlaybooksRouting} from 'src/hooks';
+import {displayUsername} from 'src/utils/user_utils';
 
 import {useLHSRefresh} from 'src/components/backstage/lhs_navigation';
 
@@ -65,7 +67,7 @@ const SelectorGrid = styled.div`
     place-items: flex-start center;
 `;
 
-const instantCreatePlaybook = async (template: PresetTemplate, teamID: string, username: string, t: (s: string) => string): Promise<string> => {
+const instantCreatePlaybook = async (template: PresetTemplate, teamID: string, ownerName: string, t: (s: string) => string): Promise<string> => {
     const pb = setPlaybookDefaults(template.template, t);
     pb.public = true;
     pb.team_id = teamID;
@@ -74,8 +76,8 @@ const instantCreatePlaybook = async (template: PresetTemplate, teamID: string, u
     pb.title = t(template.title);
     pb.description = template.description ? t(template.description) : '';
 
-    if (username !== '') {
-        pb.title = '@' + username + "'s " + t(template.title);
+    if (ownerName !== '') {
+        pb.title = ownerName + "'s " + t(template.title);
     }
     const data = await savePlaybook(pb);
 
@@ -85,6 +87,7 @@ const instantCreatePlaybook = async (template: PresetTemplate, teamID: string, u
 const TemplateSelector = ({templates}: Props) => {
     const teamId = useSelector(getCurrentTeamId);
     const currentUser = useSelector(getCurrentUser);
+    const teammateNameDisplay = useSelector(getTeammateNameDisplaySetting) || 'username';
     const {edit} = usePlaybooksRouting();
     const refreshLHS = useLHSRefresh();
     const {t} = useTranslation();
@@ -109,12 +112,12 @@ const TemplateSelector = ({templates}: Props) => {
                             author={template.author}
                             labelColor={template.labelColor}
                             onSelect={async () => {
-                                let username = currentUser.username;
+                                let ownerName = currentUser ? displayUsername(currentUser, teammateNameDisplay) : '';
                                 const isTutorial = template.title === 'LEARN.PLAYBOOKS.TITLE';
                                 if (isTutorial) {
-                                    username = '';
+                                    ownerName = '';
                                 }
-                                const playbookID = await instantCreatePlaybook(template, teamId, username, t);
+                                const playbookID = await instantCreatePlaybook(template, teamId, ownerName, t);
                                 refreshLHS();
                                 edit(playbookID);
                             }}

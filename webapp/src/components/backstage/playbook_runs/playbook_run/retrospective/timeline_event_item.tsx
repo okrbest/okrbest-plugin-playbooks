@@ -251,23 +251,26 @@ const TimelineEventItem = (props: Props) => {
             }
 
             // new format
+            const displayName = event.subject_display_name || details.users[0];
             if (details.action === 'joined') {
-                return formatMessage({defaultMessage: '@{user} joined the run'}, {user: details.users[0]});
+                return formatMessage({defaultMessage: '{user} joined the run'}, {user: displayName});
             }
-            return formatMessage({defaultMessage: '@{user} left the run'}, {user: details.users[0]});
+            return formatMessage({defaultMessage: '{user} left the run'}, {user: displayName});
         }
         case TimelineEventType.ParticipantsChanged: {
             const details = parsedDetails as ParticipantsChangedDetails;
+            const requesterName = event.requester_display_name || details.requester;
             if (details.users.length > 1) {
                 if (details.action === 'joined') {
-                    return formatMessage({defaultMessage: '{name} added {num} participants to the run'}, {name: details.requester, num: details.users.length});
+                    return formatMessage({defaultMessage: '{name} added {num} participants to the run'}, {name: requesterName, num: details.users.length});
                 }
-                return formatMessage({defaultMessage: '{name} removed {num} participants from the run'}, {name: details.requester, num: details.users.length});
+                return formatMessage({defaultMessage: '{name} removed {num} participants from the run'}, {name: requesterName, num: details.users.length});
             }
+            const displayName = event.subject_display_name || details.users[0];
             if (details.action === 'joined') {
-                return formatMessage({defaultMessage: '{name} added @{user} to the run'}, {name: details.requester, user: details.users[0]});
+                return formatMessage({defaultMessage: '{name} added {user} to the run'}, {name: requesterName, user: displayName});
             }
-            return formatMessage({defaultMessage: '{name} removed @{user} from the run'}, {name: details.requester, user: details.users[0]});
+            return formatMessage({defaultMessage: '{name} removed {user} from the run'}, {name: requesterName, user: displayName});
         }
         case TimelineEventType.PublishedRetrospective:
             return formatMessage({defaultMessage: 'Retrospective published by {name}'}, {name: event.subject_display_name});

@@ -985,6 +985,7 @@ func (s *PlaybookRunServiceImpl) buildStatusUpdatePost(statusUpdate, playbookRun
 			"numTasks":        numTasks,
 			"participantIds":  playbookRun.ParticipantIDs,
 			"authorUsername":  authorUser.Username,
+			"authorUserId":    authorUser.Id,
 			"playbookRunId":   playbookRun.ID,
 			"runName":         playbookRun.Name,
 		},
@@ -1474,7 +1475,8 @@ func (s *PlaybookRunServiceImpl) RestorePlaybookRun(playbookRunID, userID string
 		return errors.Wrapf(err, "failed to to resolve user %s", userID)
 	}
 
-	message := fmt.Sprintf("@%s changed the status of [%s](%s) from Finished to In Progress.", user.Username, playbookRunToRestore.Name, GetRunDetailsRelativeURL(playbookRunID))
+	displayName := getUserDisplayNameFromConfig(user, s.pluginAPI.Configuration.GetConfig())
+	message := fmt.Sprintf("@%s changed the status of [%s](%s) from Finished to In Progress.", displayName, playbookRunToRestore.Name, GetRunDetailsRelativeURL(playbookRunID))
 	postID := ""
 	post, err := s.poster.PostMessage(playbookRunToRestore.ChannelID, message)
 	if err != nil {
@@ -3297,7 +3299,7 @@ func (s *PlaybookRunServiceImpl) newPlaybookRunDialog(teamID, requesterID, postI
 	}
 
 	data := map[string]interface{}{
-		"Username": getUserDisplayName(user),
+		"Username": getUserDisplayNameFromConfig(user, s.pluginAPI.Configuration.GetConfig()),
 	}
 	introText := T("app.user.new_run.intro", data)
 
@@ -4328,16 +4330,35 @@ func (s *PlaybookRunServiceImpl) GetFollowers(playbookRunID string) ([]string, e
 	return followers, nil
 }
 
-func getUserDisplayName(user *model.User) string {
+func getUserDisplayNameFromConfig(user *model.User, config *model.Config) string {
+	nameFormat := model.ShowUsername
+	showFullName := false
+
+	if config != nil && config.TeamSettings.TeammateNameDisplay != nil {
+		nameFormat = *config.TeamSettings.TeammateNameDisplay
+	}
+	if config != nil && config.PrivacySettings.ShowFullName != nil {
+		showFullName = *config.PrivacySettings.ShowFullName
+	}
+
+	return getUserDisplayName(user, nameFormat, showFullName)
+}
+
+func getUserDisplayName(user *model.User, nameFormat string, showFullName bool) string {
 	if user == nil {
 		return ""
 	}
 
-	if user.FirstName != "" && user.LastName != "" {
-		return fmt.Sprintf("%s %s", user.FirstName, user.LastName)
+	if nameFormat == model.ShowFullName && !showFullName {
+		nameFormat = model.ShowUsername
 	}
 
-	return fmt.Sprintf("@%s", user.Username)
+	displayName := user.GetDisplayName(nameFormat)
+	if displayName == "" {
+		displayName = user.Username
+	}
+
+	return displayName
 }
 
 func cleanChannelName(channelName string) string {

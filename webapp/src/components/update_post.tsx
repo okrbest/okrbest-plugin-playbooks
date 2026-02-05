@@ -1,9 +1,9 @@
 // Copyright (c) 2020-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import {Post} from '@mattermost/types/posts';
@@ -11,15 +11,21 @@ import {getChannel, getChannelsNameMapInCurrentTeam} from 'mattermost-redux/sele
 import {Channel} from '@mattermost/types/channels';
 import {GlobalState} from '@mattermost/types/store';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {getProfilesByUsernames} from 'mattermost-redux/actions/users';
+import {getUserByUsername} from 'mattermost-redux/selectors/entities/users';
 import {General} from 'mattermost-redux/constants';
 import {Team} from '@mattermost/types/teams';
+import {UserProfile} from '@mattermost/types/users';
 
 import Tooltip from 'src/components/widgets/tooltip';
 import PostText from 'src/components/post_text';
 import {CustomPostContainer, CustomPostContent} from 'src/components/custom_post_styles';
 import {formatText, messageHtmlToComponent} from 'src/webapp_globals';
 import {ChannelNamesMap} from 'src/types/backstage';
+import {useEnsureProfile} from 'src/hooks';
 import {useFormattedUsernameByID} from 'src/hooks/general';
+import {displayUsername} from 'src/utils/user_utils';
 
 interface Props {
     post: Post;
@@ -27,11 +33,13 @@ interface Props {
 
 export const UpdatePost = (props: Props) => {
     const {formatMessage} = useIntl();
+    const dispatch = useDispatch();
     const channel = useSelector<GlobalState, Channel | undefined>((state) => getChannel(state, props.post.channel_id));
     const currentTeamId = useSelector<GlobalState, string>(getCurrentTeamId);
     const teamId = channel?.type === General.DM_CHANNEL || channel?.type === General.GM_CHANNEL ? currentTeamId : channel?.team_id;
     const team = useSelector<GlobalState, Team | undefined>((state) => getTeam(state, teamId ?? ''));
     const channelNamesMap = useSelector<GlobalState, ChannelNamesMap>(getChannelsNameMapInCurrentTeam);
+    const teammateNameDisplay = useSelector<GlobalState, string | undefined>(getTeammateNameDisplaySetting) || '';
 
     const markdownOptions = {
         singleline: false,
@@ -50,6 +58,16 @@ export const UpdatePost = (props: Props) => {
     const numTasksChecked = typeof props.post.props.numTasksChecked === 'number' ? props.post.props.numTasksChecked : 0;
     const numTasks = typeof props.post.props.numTasks === 'number' ? props.post.props.numTasks : 0;
     const authorUsername = typeof props.post.props.authorUsername === 'string' ? props.post.props.authorUsername : '';
+    const authorUserId = typeof props.post.props.authorUserId === 'string' ? props.post.props.authorUserId : '';
+    const authorUserByUsername = useSelector<GlobalState, UserProfile | undefined>((state) => authorUsername ? getUserByUsername(state, authorUsername) : undefined);
+    useEffect(() => {
+        if (!authorUserId && authorUsername && !authorUserByUsername) {
+            dispatch(getProfilesByUsernames([authorUsername]));
+        }
+    }, [authorUserId, authorUsername, authorUserByUsername]);
+    useEnsureProfile(authorUserId);
+    const authorDisplayName = authorUserId ? useFormattedUsernameByID(authorUserId) : displayUsername(authorUserByUsername, teammateNameDisplay, true);
+    const authorMention = authorUsername ? `@${authorUsername}` : authorDisplayName;
 
     const participantIDs = props.post.props.participantIds && Array.isArray(props.post.props.participantIds) ? props.post.props.participantIds : [];
     const numParticipants = participantIDs.length;
@@ -66,10 +84,10 @@ export const UpdatePost = (props: Props) => {
     return (
         <>
             <StyledPostText
-                text={formatMessage({defaultMessage: '@{authorUsername} posted an update for [{runName}]({overviewURL})'}, {
+                text={formatMessage({defaultMessage: '{authorMention} posted an update for [{runName}]({overviewURL})'}, {
                     runName,
                     overviewURL,
-                    authorUsername,
+                    authorMention,
                 })}
                 team={team}
             />

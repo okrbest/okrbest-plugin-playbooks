@@ -35,6 +35,7 @@ export interface TimelineEvent {
     subject_user_id: string;
     creator_user_id: string;
     subject_display_name?: string;
+    requester_display_name?: string;
 
     /** @remarks computed client-side */
     status_delete_at?: number;
